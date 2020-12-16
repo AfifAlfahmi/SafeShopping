@@ -1,13 +1,12 @@
 package com.bignerdranch.android.safeshopping
 
-import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
@@ -50,6 +49,7 @@ class ShopsListFragment : Fragment() {
         shopsRecyclerView.layoutManager = GridLayoutManager(context, 1)
 
         return view
+
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,6 +78,12 @@ class ShopsListFragment : Fragment() {
 
         private lateinit var shop: Shop
         private val tvShpoName: TextView = itemView.findViewById(R.id.tvShopName)
+        private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
+        private val tvReview: TextView = itemView.findViewById(R.id.tvReviews)
+        private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
+        private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+
+
 
         init {
             itemView.setOnClickListener {
@@ -89,6 +95,11 @@ class ShopsListFragment : Fragment() {
             this.shop=shop
 
             tvShpoName.text =shop.name
+            ratingBar.rating = shop.rating.toFloat()
+            tvReview.text = "${shop.numReviews} Review"
+            tvAddress.text = shop.location.address
+            tvCategory.text = shop.categories[0].title
+
 
 
         }
