@@ -12,7 +12,8 @@ data class  Shop(
         @SerializedName("distance") val distanceInMeters:Double,
         @SerializedName("image_url") val imageUrl:String,
         val categories:List<Category>,
-        val location: ShopLocation
+        val location: ShopLocation,
+        val coordinates: Coordinates
 
 ){
     fun displayDistance():String{

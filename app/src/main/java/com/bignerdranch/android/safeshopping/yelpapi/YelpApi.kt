@@ -12,5 +12,7 @@ interface YelpApi {
     fun fetchShops(
             @Header("Authorization") authHeader:String,
             @Query("term")searchTerm:String,
-            @Query("location")location:String): Call<YelpResponse>
+            @Query("latitude")latitude:Double,
+            @Query("longitude")longitude:Double,
+            @Query("radius")radius:Int): Call<YelpResponse>
 }

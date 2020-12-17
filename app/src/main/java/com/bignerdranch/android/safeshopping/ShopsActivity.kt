@@ -10,7 +10,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.app.Person.fromBundle
 import androidx.core.content.ContextCompat
+import androidx.media.AudioAttributesCompat.fromBundle
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
+
 private const val TAG = "ShopsActivity"
 
 class ShopsActivity : AppCompatActivity() {
@@ -19,10 +26,12 @@ class ShopsActivity : AppCompatActivity() {
 
     private val locationPermissionCode = 1
     lateinit var locationManager: LocationManager
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shops)
+        navController = findNavController(R.id.fragment)
 
         getLocation()
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -75,8 +84,7 @@ class ShopsActivity : AppCompatActivity() {
             LocationListener {
             override fun onLocationChanged(p0: Location) {
                 if (p0 != null) {
-//                    currentLocation = p0
-//                    lastLocationiveData.value = Unit
+
 
                     Log.d(TAG,"location changed"+p0.latitude.toString())
 
@@ -114,10 +122,11 @@ class ShopsActivity : AppCompatActivity() {
     }
 
     fun navigateToShopsListFragment(){
-        val fragment = ShopsListFragment.newInstance(lat,long)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainer,fragment)
-            .commit()
+
+
+
+        ShopsListFragment.lat = lat
+        findNavController(R.id.fragment).navigate(R.id.shopsListFragment)
+
     }
 }
