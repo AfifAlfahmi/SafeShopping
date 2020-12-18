@@ -3,6 +3,8 @@ package com.bignerdranch.android.safeshopping
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bignerdranch.android.safeshopping.weatherapi.Condition
+import com.bignerdranch.android.safeshopping.weatherapi.CurrentWeather
 import com.bignerdranch.android.safeshopping.weatherapi.WeatherApi
 import com.bignerdranch.android.safeshopping.weatherapi.WeatherResponse
 import com.bignerdranch.android.safeshopping.yelpapi.YelpApi
@@ -21,28 +23,28 @@ private const val TAG = "FetchShops"
 
 class FetchShops {
 
-    init {
 
+    fun fetchWeather(loc:String) :LiveData<WeatherResponse>{
 
-
-    }
-    fun fetchWeather() {
+        val responseLiveData: MutableLiveData<WeatherResponse> = MutableLiveData()
 
         val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_WEATHER_URL)
                 .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
                 .build()
         val weatherApi = retrofit.create(WeatherApi::class.java)
-        weatherApi.fetchWeather()
+        weatherApi.fetchWeather(loc)
                 .enqueue(object :Callback<WeatherResponse>{
 
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
                 Log.d(TAG,"onResponse weather ${response.body()?.current?.condition?.text}")
                 val body = response.body()
-                if(body == null){
-                    Log.d(TAG,"onResponse weather  null response body")
-                    return
+                if(body != null){
+                //    Log.d(TAG,"onResponse weather  null response body")
+
+                    responseLiveData.value = body
                 }
+
 
 
             }
@@ -53,6 +55,7 @@ class FetchShops {
 
 
         })
+        return responseLiveData
 
     }
     fun fetchShops(): LiveData<List<Shop>> {
@@ -64,7 +67,8 @@ class FetchShops {
                 .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
                 .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
-        yelpApi.fetchShops("Bearer $API_KEY","McDonalds",40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
+        yelpApi.fetchShops("Bearer $API_KEY",
+            "McDonalds",40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
 
             override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
               //  Log.d(TAG,"onResponse ${response.body()}")
@@ -86,4 +90,5 @@ class FetchShops {
         })
         return responseLiveData
     }
+
 }

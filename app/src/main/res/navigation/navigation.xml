@@ -13,12 +13,31 @@
         <action
             android:id="@+id/action_shopsListFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_shopsListFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
         />
     </fragment>
 
-    <dialog
+    <fragment
         android:id="@+id/mapsFragment"
         android:name="com.bignerdranch.android.safeshopping.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_shopsListFragment"
+            app:destination="@id/shopsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.bignerdranch.android.safeshopping.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" >
+
+
+        <argument
+            android:name="shop"
+            app:argType="com.bignerdranch.android.safeshopping.Shop" />
+    </fragment>
+
 </navigation>

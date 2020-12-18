@@ -7,5 +7,6 @@ import com.google.gson.annotations.SerializedName
 
 
     lateinit var  current: CurrentWeather
+     lateinit var  forecast:Forecast
 
  }
