@@ -10,6 +10,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.safeshopping.weatherapi.CurrentWeather
 import com.bignerdranch.android.safeshopping.weatherapi.WeatherResponse
@@ -60,6 +61,10 @@ class ShopFragment : Fragment() {
         tvDate = view.findViewById(R.id.tvDate)
         ratingBar = view.findViewById(R.id.shopRatingBar)
 
+        tvName.setOnClickListener{
+            Navigation.findNavController(view).navigate(ShopFragmentDirections
+                .actionShopFragmentToMapsFragment2())
+        }
 
         return view
     }
