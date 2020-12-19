@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/tvLocation"
-        android:layout_width="137dp"
+        android:layout_width="161dp"
         android:layout_height="30dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,11 +27,11 @@
 
     <Button
         android:id="@+id/btnMap"
-        android:layout_width="108dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="80dp"
-        android:text="Button"
+        android:layout_width="102dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="36dp"
+        android:text="Map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,5 @@
 package com.bignerdranch.android.safeshopping
 
-import android.R.attr.radius
-import android.app.ProgressDialog.show
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -16,14 +14,10 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Transformation
 
 
 private const val ARG_LAT = "lat"
@@ -86,8 +80,7 @@ class ShopsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-         val fetchShops = FetchShops()
-        fetchShops.fetchWeather()
+
         Log.d(TAG,"onViewCreated")
 
             tvLocation.text = lat.toString()
@@ -103,6 +96,7 @@ class ShopsListFragment : Fragment() {
                                 if(shopsList.size == 0 )
 
                                     shopsListViewModel.fetchShops()
+
 
 
                     shopsRecyclerView.adapter = ShopAdapter(shopsList)
@@ -129,6 +123,8 @@ class ShopsListFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
+                findNavController(itemView).navigate(ShopsListFragmentDirections
+                    .actionShopsListFragmentToShopFragment(shop))
 
 
 
@@ -142,7 +138,7 @@ class ShopsListFragment : Fragment() {
             tvShpoName.text =shop.name
             ratingBar.rating = shop.rating.toFloat()
             tvReview.text = "${shop.numReviews} Review"
-            tvAddress.text = shop.coordinates.latitude
+            tvAddress.text = shop.location.address
             tvCategory.text = shop.categories[0].title
             Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)
                 .into(imageViewShop)
@@ -150,7 +146,8 @@ class ShopsListFragment : Fragment() {
         }
 
         override fun onClick(v: View) {
-//            callbacks?.onPhotoSelected(galleryItem.url)
+
+
         }
 
 

@@ -39,11 +39,7 @@ class ShopsActivity : AppCompatActivity() {
             return
         }
 
-        val isFragmentContainerEmpty = savedInstanceState == null
-        if (isFragmentContainerEmpty) {
-           // navigateToShopsListFragment()
 
-        }
 
 
     }
@@ -67,7 +63,7 @@ class ShopsActivity : AppCompatActivity() {
 
                 requestLocation()
 
-               // navigateToShopsListFragment()
+
             }
             else {
                 Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
