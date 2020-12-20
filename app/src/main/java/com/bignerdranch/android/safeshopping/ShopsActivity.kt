@@ -117,6 +117,10 @@ class ShopsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.fragment).navigateUp()
+                ||  super.onSupportNavigateUp()
+    }
     fun navigateToShopsListFragment(){
 
 

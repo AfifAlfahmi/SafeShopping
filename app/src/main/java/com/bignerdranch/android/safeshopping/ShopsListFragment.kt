@@ -3,14 +3,10 @@ package com.bignerdranch.android.safeshopping
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -33,7 +29,7 @@ class ShopsListFragment : Fragment() {
     lateinit var tvLocation:TextView
     private lateinit var shopsRecyclerView: RecyclerView
     private lateinit var btnMap: Button
-
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var shopsListViewModel: ShopsListViewModel
 
@@ -42,7 +38,7 @@ class ShopsListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         shopsListViewModel = ViewModelProviders.of(this).get(ShopsListViewModel::class.java)
-
+        setHasOptionsMenu(true)
         arguments?.let {
             if(it.getDouble(ARG_LAT) != null){
                 shopsListViewModel.lat = it.getDouble(ARG_LAT)
@@ -50,6 +46,8 @@ class ShopsListFragment : Fragment() {
 
             }
         }
+
+
 
 
     }
@@ -60,7 +58,8 @@ class ShopsListFragment : Fragment() {
         tvLocation = view.findViewById(R.id.tvLocation)
         shopsRecyclerView = view.findViewById(R.id.shopsRecyclerView)
         btnMap = view.findViewById(R.id.btnMap)
-
+        progressBar =view.findViewById(R.id.progressBar)
+        progressBar.visibility = View.GONE
 
          val fetchShops = FetchShops()
         fetchShops.fetchShops()
@@ -107,13 +106,55 @@ class ShopsListFragment : Fragment() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.shop_list_menu, menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(searchTerm: String): Boolean {
+                    Log.d(TAG, "QueryTextSubmit: $searchTerm")
+                    progressBar.visibility = View.VISIBLE
+                    shopsListViewModel.searchShops(searchTerm)
+                    searchView.onActionViewCollapsed()
+
+                    shopsListViewModel.shopsListLiveData.observe(
+                        viewLifecycleOwner,
+                        Observer { shopsList ->
+
+                            shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                            progressBar.visibility = View.GONE
+
+                        })
+                    return true
+                }
+
+                override fun onQueryTextChange(queryText: String): Boolean {
+                    Log.d(TAG, "QueryTextChange: $queryText")
+                    return false
+                }
+            }
+            )
+        }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {R.id.menu_item_clear -> {
+            //photoGalleryViewModel.fetchPhotos("")
+             Toast.makeText(context,"cleared",Toast.LENGTH_LONG).show()
+            true
+        }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private inner class ShopHolder(view: View)
         : RecyclerView.ViewHolder(view),View.OnClickListener {
 
         private lateinit var shop: Shop
         private val tvShpoName: TextView = itemView.findViewById(R.id.tvShopName)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
-        private val tvReview: TextView = itemView.findViewById(R.id.tvReviews)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         private val imageViewShop: ImageView = itemView.findViewById(R.id.imageView)
@@ -137,7 +178,6 @@ class ShopsListFragment : Fragment() {
 
             tvShpoName.text =shop.name
             ratingBar.rating = shop.rating.toFloat()
-            tvReview.text = "${shop.numReviews} Review"
             tvAddress.text = shop.location.address
             tvCategory.text = shop.categories[0].title
             Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)

@@ -18,6 +18,10 @@ class ShopsListViewModel : ViewModel() {
         shopsListLiveData =fetchShops.fetchShops()
 
     }
+    fun searchShops(searchTerm:String){
+        shopsListLiveData =fetchShops.searchShops(searchTerm)
+
+    }
 
 
 
