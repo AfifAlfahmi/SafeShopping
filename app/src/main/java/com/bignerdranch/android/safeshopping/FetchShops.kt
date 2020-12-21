@@ -80,6 +80,9 @@ class FetchShops {
                     return
                 }
                 shops.addAll(body.shops)
+
+
+
                 responseLiveData.value = shops
 
             }

@@ -126,7 +126,7 @@ class ShopsActivity : AppCompatActivity() {
 
 
         ShopsListFragment.lat = lat
-        findNavController(R.id.fragment).navigate(R.id.shopsListFragment)
+       // findNavController(R.id.fragment).navigate(R.id.shopsListFragment)
 
     }
 }

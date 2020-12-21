@@ -1,5 +1,10 @@
 package com.bignerdranch.android.safeshopping
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkInfo
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -66,9 +72,10 @@ class ShopsListFragment : Fragment() {
         shopsRecyclerView.layoutManager = GridLayoutManager(context, 1)
         btnMap.setOnClickListener {
 
-            findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
+            //findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
 
-
+            val action = ShopsListFragmentDirections.actionShopsListFragmentToMapsFragment()
+            findNavController().navigate(action)
 
 
         }
@@ -79,12 +86,28 @@ class ShopsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        if(!isInternetConnected()){
+            Log.d(TAG,"network Lost")
+            shopsListViewModel.getShopsFromRoom()
+            shopsListViewModel.shopsLocalListLiveData.observe(
+                viewLifecycleOwner,
+                Observer { shopsList ->
 
-        Log.d(TAG,"onViewCreated")
+                    shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                    Log.d(TAG,shopsList.size.toString())
+
+
+                })
+        }
+        else{
+            Log.d(TAG,"network  Available")
+
+        }
+
+        Log.d(TAG,"onView Created")
 
             tvLocation.text = lat.toString()
             Log.d(TAG,shopsListViewModel.lat.toString())
-
 
 
         shopsListViewModel.shopsListLiveData.observe(
@@ -92,19 +115,50 @@ class ShopsListFragment : Fragment() {
                 Observer { shopsList ->
 
 
-                                if(shopsList.size == 0 )
-
+                                if(shopsList.size == 0 ){
                                     shopsListViewModel.fetchShops()
+                                }
+
+
 
 
 
                     shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                    shopsListViewModel.addShops(shopsList)
 
                 })
 
 
 
     }
+
+    fun isInternetConnected() :Boolean{
+        var internetConnection = true
+        val cm: ConnectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE)    as ConnectivityManager
+        val builder: NetworkRequest.Builder = NetworkRequest.Builder()
+
+        cm.registerNetworkCallback(
+            builder.build(),
+            object : ConnectivityManager.NetworkCallback() {
+
+                override fun onAvailable(network: Network) {
+
+
+                    internetConnection = true
+
+                }
+
+                override fun onLost(network: Network) {
+
+                    internetConnection = false
+
+                }
+            })
+        return internetConnection
+    }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -126,6 +180,8 @@ class ShopsListFragment : Fragment() {
 
                             shopsRecyclerView.adapter = ShopAdapter(shopsList)
                             progressBar.visibility = View.GONE
+                            shopsListViewModel.addShops(shopsList)
+
 
                         })
                     return true
@@ -164,8 +220,8 @@ class ShopsListFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
-                findNavController(itemView).navigate(ShopsListFragmentDirections
-                    .actionShopsListFragmentToShopFragment(shop))
+                val action = ShopsListFragmentDirections.actionShopsListFragmentToShopFragment(shop)
+                findNavController().navigate(action)
 
 
 
