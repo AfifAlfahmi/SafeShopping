@@ -21,6 +21,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -118,6 +119,9 @@ class MapsFragment : BottomSheetDialogFragment() {
                     val navController = navHostFragment.navController
 
                     navController.navigate(MapsFragmentDirections.actionMapsFragmentToShopFragment(shop))
+
+
+
 
     }
     private  fun drawMarker(googleMap:GoogleMap){

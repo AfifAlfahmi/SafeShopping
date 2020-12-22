@@ -14,10 +14,18 @@ interface YelpApi {
     @GET("businesses/search")
     fun fetchShops(
             @Header("Authorization") authHeader:String,
-            @Query("term")searchTerm:String,
             @Query("latitude")latitude:Double,
             @Query("longitude")longitude:Double,
             @Query("radius")radius:Int): Call<YelpResponse>
+
+    @GET("businesses/search")
+    fun searchShops(
+        @Header("Authorization") authHeader:String,
+        @Query("term")searchTerm:String,
+        @Query("latitude")latitude:Double,
+        @Query("longitude")longitude:Double,
+        @Query("radius")radius:Int): Call<YelpResponse>
+
 
     @GET("businesses/{id}")  //WavvLdfdP6g8aZTtbBQHTw
     fun fetchShopDetails(

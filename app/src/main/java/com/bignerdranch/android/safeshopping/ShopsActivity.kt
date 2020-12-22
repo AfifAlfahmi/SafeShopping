@@ -117,12 +117,16 @@ class ShopsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.fragment).navigateUp()
+                ||  super.onSupportNavigateUp()
+    }
     fun navigateToShopsListFragment(){
 
 
 
         ShopsListFragment.lat = lat
-        findNavController(R.id.fragment).navigate(R.id.shopsListFragment)
+       // findNavController(R.id.fragment).navigate(R.id.shopsListFragment)
 
     }
 }

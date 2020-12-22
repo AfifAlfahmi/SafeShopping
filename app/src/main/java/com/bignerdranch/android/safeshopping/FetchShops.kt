@@ -9,6 +9,7 @@ import com.bignerdranch.android.safeshopping.weatherapi.WeatherApi
 import com.bignerdranch.android.safeshopping.weatherapi.WeatherResponse
 import com.bignerdranch.android.safeshopping.yelpapi.YelpApi
 import com.bignerdranch.android.safeshopping.yelpapi.YelpResponse
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,19 +63,57 @@ class FetchShops {
         val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
         var shops=  mutableListOf<Shop>()
 
+
         val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
                 .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
         yelpApi.fetchShops("Bearer $API_KEY",
-            "McDonalds",40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
+            40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
 
             override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-              //  Log.d(TAG,"onResponse ${response.body()}")
+               Log.d(TAG,"onResponse ${response.body()}")
                 val body = response.body()
                 if(body == null){
-                   // Log.d(TAG,"onResponse  null response body")
+                    Log.d(TAG,"onResponse  null response body")
+                    return
+                }
+                shops.addAll(body.shops)
+
+
+
+                responseLiveData.value = shops
+
+            }
+            override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
+                Log.d(TAG,"onFailure $t")
+
+            }
+
+
+        })
+        return responseLiveData
+    }
+
+    fun searchShops(searchTerm:String): LiveData<List<Shop>> {
+        val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
+        var shops=  mutableListOf<Shop>()
+
+
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
+            .build()
+        val yelpApi = retrofit.create(YelpApi::class.java)
+        yelpApi.searchShops("Bearer $API_KEY",
+            searchTerm,40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
+
+            override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
+                Log.d(TAG,"onResponse ${response.body()}")
+                val body = response.body()
+                if(body == null){
+                    Log.d(TAG,"onResponse  null response body")
                     return
                 }
                 shops.addAll(body.shops)
@@ -82,7 +121,7 @@ class FetchShops {
 
             }
             override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
-               // Log.d(TAG,"onFailure $t")
+                Log.d(TAG,"onFailure $t")
 
             }
 

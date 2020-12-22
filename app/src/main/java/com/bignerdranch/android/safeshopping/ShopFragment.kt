@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.safeshopping.weatherapi.CurrentWeather
 import com.bignerdranch.android.safeshopping.weatherapi.WeatherResponse
@@ -49,6 +52,23 @@ class ShopFragment : Fragment() {
         }
         shopFragmentViewModel = ViewModelProviders.of(this).get(ShopFragmentViewModel::class.java)
 
+        if(1>2) {
+
+
+            activity?.onBackPressedDispatcher?.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        val navHostFragment =
+                            activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
+                        val navController = navHostFragment.navController
+                        navController.navigate(ShopFragmentDirections.actionShopFragmentToMapsFragment2())
+                      //  navController.navigateUp()
+
+                    }
+                })
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,8 +82,7 @@ class ShopFragment : Fragment() {
         ratingBar = view.findViewById(R.id.shopRatingBar)
 
         tvName.setOnClickListener{
-            Navigation.findNavController(view).navigate(ShopFragmentDirections
-                .actionShopFragmentToMapsFragment2())
+
         }
 
         return view

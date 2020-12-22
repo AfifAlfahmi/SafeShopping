@@ -1,20 +1,22 @@
 package com.bignerdranch.android.safeshopping
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkInfo
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -33,7 +35,7 @@ class ShopsListFragment : Fragment() {
     lateinit var tvLocation:TextView
     private lateinit var shopsRecyclerView: RecyclerView
     private lateinit var btnMap: Button
-
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var shopsListViewModel: ShopsListViewModel
 
@@ -42,7 +44,7 @@ class ShopsListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         shopsListViewModel = ViewModelProviders.of(this).get(ShopsListViewModel::class.java)
-
+        setHasOptionsMenu(true)
         arguments?.let {
             if(it.getDouble(ARG_LAT) != null){
                 shopsListViewModel.lat = it.getDouble(ARG_LAT)
@@ -50,6 +52,8 @@ class ShopsListFragment : Fragment() {
 
             }
         }
+
+
 
 
     }
@@ -60,16 +64,18 @@ class ShopsListFragment : Fragment() {
         tvLocation = view.findViewById(R.id.tvLocation)
         shopsRecyclerView = view.findViewById(R.id.shopsRecyclerView)
         btnMap = view.findViewById(R.id.btnMap)
-
+        progressBar =view.findViewById(R.id.progressBar)
+        progressBar.visibility = View.GONE
 
          val fetchShops = FetchShops()
         fetchShops.fetchShops()
         shopsRecyclerView.layoutManager = GridLayoutManager(context, 1)
         btnMap.setOnClickListener {
 
-            findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
+            //findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
 
-
+            val action = ShopsListFragmentDirections.actionShopsListFragmentToMapsFragment()
+            findNavController().navigate(action)
 
 
         }
@@ -80,12 +86,28 @@ class ShopsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        if(!isInternetConnected()){
+            Log.d(TAG,"network Lost")
+            shopsListViewModel.getShopsFromRoom()
+            shopsListViewModel.shopsLocalListLiveData.observe(
+                viewLifecycleOwner,
+                Observer { shopsList ->
 
-        Log.d(TAG,"onViewCreated")
+                    shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                    Log.d(TAG,shopsList.size.toString())
+
+
+                })
+        }
+        else{
+            Log.d(TAG,"network  Available")
+
+        }
+
+        Log.d(TAG,"onView Created")
 
             tvLocation.text = lat.toString()
             Log.d(TAG,shopsListViewModel.lat.toString())
-
 
 
         shopsListViewModel.shopsListLiveData.observe(
@@ -93,18 +115,94 @@ class ShopsListFragment : Fragment() {
                 Observer { shopsList ->
 
 
-                                if(shopsList.size == 0 )
-
+                                if(shopsList.size == 0 ){
                                     shopsListViewModel.fetchShops()
+                                }
+
+
 
 
 
                     shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                    shopsListViewModel.addShops(shopsList)
 
                 })
 
 
 
+    }
+
+    fun isInternetConnected() :Boolean{
+        var internetConnection = true
+        val cm: ConnectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE)    as ConnectivityManager
+        val builder: NetworkRequest.Builder = NetworkRequest.Builder()
+
+        cm.registerNetworkCallback(
+            builder.build(),
+            object : ConnectivityManager.NetworkCallback() {
+
+                override fun onAvailable(network: Network) {
+
+
+                    internetConnection = true
+
+                }
+
+                override fun onLost(network: Network) {
+
+                    internetConnection = false
+
+                }
+            })
+        return internetConnection
+    }
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.shop_list_menu, menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(searchTerm: String): Boolean {
+                    Log.d(TAG, "QueryTextSubmit: $searchTerm")
+                    progressBar.visibility = View.VISIBLE
+                    shopsListViewModel.searchShops(searchTerm)
+                    searchView.onActionViewCollapsed()
+
+                    shopsListViewModel.shopsListLiveData.observe(
+                        viewLifecycleOwner,
+                        Observer { shopsList ->
+
+                            shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                            progressBar.visibility = View.GONE
+                            shopsListViewModel.addShops(shopsList)
+
+
+                        })
+                    return true
+                }
+
+                override fun onQueryTextChange(queryText: String): Boolean {
+                    Log.d(TAG, "QueryTextChange: $queryText")
+                    return false
+                }
+            }
+            )
+        }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {R.id.menu_item_clear -> {
+            //photoGalleryViewModel.fetchPhotos("")
+             Toast.makeText(context,"cleared",Toast.LENGTH_LONG).show()
+            true
+        }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private inner class ShopHolder(view: View)
@@ -113,7 +211,6 @@ class ShopsListFragment : Fragment() {
         private lateinit var shop: Shop
         private val tvShpoName: TextView = itemView.findViewById(R.id.tvShopName)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
-        private val tvReview: TextView = itemView.findViewById(R.id.tvReviews)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         private val imageViewShop: ImageView = itemView.findViewById(R.id.imageView)
@@ -123,8 +220,8 @@ class ShopsListFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
-                findNavController(itemView).navigate(ShopsListFragmentDirections
-                    .actionShopsListFragmentToShopFragment(shop))
+                val action = ShopsListFragmentDirections.actionShopsListFragmentToShopFragment(shop)
+                findNavController().navigate(action)
 
 
 
@@ -137,7 +234,6 @@ class ShopsListFragment : Fragment() {
 
             tvShpoName.text =shop.name
             ratingBar.rating = shop.rating.toFloat()
-            tvReview.text = "${shop.numReviews} Review"
             tvAddress.text = shop.location.address
             tvCategory.text = shop.categories[0].title
             Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)
