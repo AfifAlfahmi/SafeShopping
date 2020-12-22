@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -39,7 +40,7 @@ import kotlinx.coroutines.runBlocking
 
 private const val TAG = "MapsFragment"
 
-class MapsFragment : BottomSheetDialogFragment() {
+class MapsFragment : Fragment() {
     private lateinit var btnNavToShops: Button
     var shopsList= mutableListOf<Shop>()
     lateinit var mapView:View
@@ -70,8 +71,6 @@ class MapsFragment : BottomSheetDialogFragment() {
                 }
 
             }
-
-
             true
 
         }
@@ -115,6 +114,8 @@ class MapsFragment : BottomSheetDialogFragment() {
 
     }
     private  fun navigateToShopFragment(shop:Shop){
+
+
                     val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
                     val navController = navHostFragment.navController
 

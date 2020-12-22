@@ -45,9 +45,6 @@ class FetchShops {
 
                     responseLiveData.value = body
                 }
-
-
-
             }
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
                 Log.d(TAG,"onFailure weather $t")
@@ -56,6 +53,38 @@ class FetchShops {
 
 
         })
+        return responseLiveData
+
+    }
+
+    fun fetchWeatherByDay(loc:String,day:String) :LiveData<WeatherResponse>{
+
+        val responseLiveData: MutableLiveData<WeatherResponse> = MutableLiveData()
+
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(BASE_WEATHER_URL)
+            .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
+            .build()
+        val weatherApi = retrofit.create(WeatherApi::class.java)
+        weatherApi.fetchWeatherByDay(loc,day)
+            .enqueue(object :Callback<WeatherResponse>{
+
+                override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+                    Log.d(TAG,"onResponse weather by day ${response.body()?.forecast?.forecastday?.get(0)?.date}")
+                    val body = response.body()
+                    if(body != null){
+                        //    Log.d(TAG,"onResponse weather  null response body")
+
+                        responseLiveData.value = body
+                    }
+                }
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    Log.d(TAG,"onFailure weather by day $t")
+
+                }
+
+
+            })
         return responseLiveData
 
     }

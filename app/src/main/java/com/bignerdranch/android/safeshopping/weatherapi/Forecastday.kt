@@ -4,4 +4,5 @@ class Forecastday {
 
     lateinit var date :String
     lateinit var day :Day
+    lateinit var astro:Astro
 }

@@ -18,4 +18,8 @@ class ShopFragmentViewModel: ViewModel() {
         shopWeatherLiveData = fetchShops.fetchWeather(loc)
 
     }
+
+    fun fetchShopWeatherByDay(loc:String,day:String){
+        shopWeatherLiveData = fetchShops.fetchWeatherByDay(loc,day)
+    }
 }
