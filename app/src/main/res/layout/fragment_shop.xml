@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ShopFragment">
@@ -10,54 +12,35 @@
 
     <ImageView
         android:id="@+id/shopImageView"
-        android:layout_width="385dp"
-        android:layout_height="373dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="379dp"
+        android:layout_height="284dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
     <TextView
-        android:id="@+id/tvCondition"
-        android:layout_width="117dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
-
-    <TextView
         android:id="@+id/tvName"
-        android:layout_width="274dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="282dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvTemp"
-        android:layout_width="116dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/tvCondition"
-        app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
-
     <RatingBar
         android:id="@+id/shopRatingBar"
         style="@android:style/Widget.Material.Light.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="44dp"
         android:numStars="5"
         android:progressBackgroundTint="@color/gray"
         android:progressTint="@color/yellow"
@@ -68,15 +51,276 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="96dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/tvCondition"
-        app:layout_constraintTop_toBottomOf="@+id/tvTemp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="355dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopRatingBar"
+        cardView:cardCornerRadius="15dp"
+        cardView:cardElevation="8dp">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Now"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Today"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Wed 21"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+
+                <Button
+                    android:id="@+id/btnDay9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="thr 22"
+                    android:textColor="@color/purple_700" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="331dp"
+        android:layout_height="152dp"
+        android:layout_marginTop="112dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopRatingBar"
+        cardView:cardCornerRadius="15dp"
+        cardView:cardElevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="336dp"
+            android:layout_height="143dp"
+            android:background="@color/gray"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView4"
+                android:layout_width="96dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toStartOf="@+id/cardView2"
+                app:layout_constraintHorizontal_bias="0.617"
+                app:layout_constraintStart_toEndOf="@+id/cardView"
+                app:layout_constraintTop_toTopOf="parent"
+                cardView:cardCornerRadius="15dp"
+                cardView:cardElevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="95dp"
+                    android:layout_height="36dp"
+                    android:background="@color/white"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_700"
+                    android:textSize="14sp" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="95dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                cardView:cardCornerRadius="15dp"
+                cardView:cardElevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvCondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/white"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_700" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="95dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                cardView:cardCornerRadius="15dp"
+                cardView:cardElevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvTemp"
+                    android:layout_width="93dp"
+                    android:layout_height="20dp"
+                    android:background="@color/white"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_700" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
+                android:layout_width="95dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                cardView:cardCornerRadius="15dp"
+                cardView:cardElevation="8dp">
+
+                <ImageView
+                    android:id="@+id/imgCondition"
+                    android:layout_width="95dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/clear_weather" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView5"
+                android:layout_width="95dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/cardView3"
+                app:layout_constraintTop_toBottomOf="@+id/cardView4"
+                cardView:cardCornerRadius="15dp"
+                cardView:cardElevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvHumidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_700" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="95dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/cardView5"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                cardView:cardCornerRadius="15dp"
+                cardView:cardElevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvPressure"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_700" />
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnHourly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Hourly"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.489"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

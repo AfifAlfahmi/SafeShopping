@@ -155,6 +155,7 @@ class ShopsListFragment : Fragment() {
 
                 }
             })
+        cm.unregisterNetworkCallback(ConnectivityManager.NetworkCallback())
         return internetConnection
     }
 

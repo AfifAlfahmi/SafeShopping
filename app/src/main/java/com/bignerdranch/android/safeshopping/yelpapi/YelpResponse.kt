@@ -11,7 +11,7 @@ data class YelpResponse (
 
 
 data class Category(
-        val title:String
+    val title:String
 )
 
 data class ShopLocation(
