@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="340dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    cardView:cardCornerRadius="8dp"
+    cardView:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="340dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvHourTime"
+            android:layout_width="116dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgViewShow"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/down" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/expandedLayout"
+            android:layout_width="365dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHourTime">
+
+            <TextView
+                android:id="@+id/tvHourTemp"
+                android:layout_width="89dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvHourCondition"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvHourCondition"
+                android:layout_width="96dp"
+                android:layout_height="47dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toEndOf="@+id/imgViewHour"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgViewHour"
+                android:layout_width="112dp"
+                android:layout_height="47dp"
+                android:layout_marginStart="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/clear_weather" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

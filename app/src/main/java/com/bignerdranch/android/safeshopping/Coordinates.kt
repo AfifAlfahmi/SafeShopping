@@ -1,9 +1,11 @@
 package com.bignerdranch.android.safeshopping
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-
- class Coordinates {
-     lateinit var  latitude: String
-     lateinit  var longitude: String
- }
+@Parcelize
+class Coordinates (
+      var  latitude: String,
+       var longitude: String
+    ):Parcelable
 
