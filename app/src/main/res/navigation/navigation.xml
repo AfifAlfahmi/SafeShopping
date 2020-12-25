@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_shopsListFragment_to_shopFragment"
             app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_shopsListFragment_to_favoriteListFragment"
+            app:destination="@id/favoriteListFragment" />
         />
     </fragment>
 
@@ -52,5 +55,9 @@
         android:id="@+id/hoursListFragment"
         android:name="com.bignerdranch.android.safeshopping.HoursListFragment"
         android:label="HoursListFragment" />
+    <fragment
+        android:id="@+id/favoriteListFragment"
+        android:name="com.bignerdranch.android.safeshopping.FavoriteListFragment"
+        android:label="FavoriteListFragment" />
 
 </navigation>

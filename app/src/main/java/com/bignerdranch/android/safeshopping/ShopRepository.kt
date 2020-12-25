@@ -19,6 +19,8 @@ class ShopRepository private constructor(context: Context) {
     private val database : ShopDatabase = Room.databaseBuilder(
         context.applicationContext,ShopDatabase::class.java,DATABASE_NAME).build()
     private val shopDao = database.shopDao()
+    private val favshopDao = database.favoriteshopDao()
+
     private val executor = Executors.newSingleThreadExecutor()
 
 
@@ -31,11 +33,20 @@ class ShopRepository private constructor(context: Context) {
             shopDao.addShops(shopsList)
         }
     }
-    fun deleteShop(id:String){
+    fun deleteShop(id:String) {
         executor.execute {
             shopDao.deleteShop(id)
         }
     }
+
+        fun addFavoriteShop(favShop:FavoriteShop){
+            executor.execute{
+                favshopDao.addFavoriteShop(favShop)
+            }
+
+        }
+    fun getFavoritesShops(): LiveData<List<FavoriteShop>> = favshopDao.getFavoritesShops()
+
     companion object {
         private var INSTANCE: ShopRepository? = null
         fun initialize(context: Context) {

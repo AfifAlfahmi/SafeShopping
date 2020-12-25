@@ -9,6 +9,7 @@ import kotlinx.android.parcel.RawValue
 data class Hour(
  @SerializedName("temp_c")  val temp:String,
      val time:String,
+     val humidity: String,
      val condition:@RawValue Condition,
-    var isExpanded:Boolean = false
+     var isExpanded:Boolean = false
 ): Parcelable
