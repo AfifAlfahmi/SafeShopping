@@ -40,14 +40,5 @@ class ShopTypeConverter {
     }
 
 
-//    @TypeConverter
-//    fun fromCategory(categories: Category?): String? {
-//        return categories?.title
-//    }
-//    @TypeConverter
-//    fun toCategory(title: String?): Category? {
-//        return title?.let {
-//            Category(it)
-//        }
-//    }
+
 }

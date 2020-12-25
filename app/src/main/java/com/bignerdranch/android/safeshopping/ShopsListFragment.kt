@@ -216,16 +216,10 @@ class ShopsListFragment : Fragment() {
         private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         private val imageViewShop: ImageView = itemView.findViewById(R.id.imageView)
 
-
-
-
         init {
             itemView.setOnClickListener {
                 val action = ShopsListFragmentDirections.actionShopsListFragmentToShopFragment(shop)
                 findNavController().navigate(action)
-
-
-
             }
 
         }
@@ -243,8 +237,6 @@ class ShopsListFragment : Fragment() {
         }
 
         override fun onClick(v: View) {
-
-
         }
 
 

@@ -44,6 +44,13 @@
         <action
             android:id="@+id/action_shopFragment_to_mapsFragment2"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_hoursListFragment"
+            app:destination="@id/hoursListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/hoursListFragment"
+        android:name="com.bignerdranch.android.safeshopping.HoursListFragment"
+        android:label="HoursListFragment" />
 
 </navigation>

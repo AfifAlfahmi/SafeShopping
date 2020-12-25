@@ -12,7 +12,7 @@
 
     <ImageView
         android:id="@+id/shopImageView"
-        android:layout_width="379dp"
+        android:layout_width="390dp"
         android:layout_height="284dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_launcher_foreground"
@@ -35,24 +35,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <RatingBar
         android:id="@+id/shopRatingBar"
         style="@android:style/Widget.Material.Light.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:numStars="5"
         android:progressBackgroundTint="@color/gray"
         android:progressTint="@color/yellow"
-        android:rating="1.5"
 
+        android:rating="1.5"
         android:stepSize="0.5"
         android:theme="@style/RatingBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
 
-
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView7"
         android:layout_width="355dp"
         android:layout_height="54dp"
         android:layout_marginTop="44dp"
@@ -176,7 +178,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="331dp"
         android:layout_height="152dp"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopRatingBar"
@@ -311,7 +313,7 @@
                 android:id="@+id/btnHourly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="Hourly"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.489"
@@ -321,6 +323,34 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvShopCategory"
+        android:layout_width="87dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/shopRatingBar"
+        app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
+
+    <ImageView
+        android:id="@+id/imgViewMap"
+        android:layout_width="75dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/map_icon"
+        app:layout_constraintStart_toEndOf="@+id/tvShopCategory"
+        app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
+
+    <ImageView
+        android:id="@+id/imgFavorite"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/ic_favorite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvShopCategory" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

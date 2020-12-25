@@ -6,10 +6,9 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 
 @Parcelize
-data class Forecastday(
-
-     val date :String,
-     val day :@RawValue Day,
-     var astro:@RawValue Astro,
-    @SerializedName("hour") val hours:@RawValue List<Hour>
+data class Hour(
+ @SerializedName("temp_c")  val temp:String,
+     val time:String,
+     val condition:@RawValue Condition,
+    var isExpanded:Boolean = false
 ): Parcelable

@@ -1,5 +1,7 @@
-package com.bignerdranch.android.safeshopping
+ package com.bignerdranch.android.safeshopping
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,10 +17,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bignerdranch.android.safeshopping.weatherapi.CurrentWeather
-import com.bignerdranch.android.safeshopping.weatherapi.Forecastday
-import com.bignerdranch.android.safeshopping.weatherapi.WeatherResponse
+import com.bignerdranch.android.safeshopping.weatherapi.*
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -29,6 +30,7 @@ import java.util.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val TAG = "ShopFragment"
+private const val DIALOG_HOURS = "DialogHours"
 
 
 class ShopFragment : Fragment() {
@@ -37,12 +39,17 @@ class ShopFragment : Fragment() {
     private var param2: String? = null
     private val args: ShopFragmentArgs by navArgs()
     lateinit var tvName:TextView
+    lateinit var tvCategory:TextView
+
     lateinit var imageView:ImageView
+    lateinit var imgViewMap:ImageView
+
     lateinit var tvCondition:TextView
     lateinit var tvTemp:TextView
     lateinit var tvDate:TextView
     lateinit var tvHumidity:TextView
     lateinit var tvPressure:TextView
+
     lateinit var btnNow:Button
     lateinit var btnDay0:Button
     lateinit var btnDay1:Button
@@ -55,37 +62,16 @@ class ShopFragment : Fragment() {
     lateinit var btnDay8:Button
     lateinit var btnDay9:Button
     lateinit var btnHourly:Button
-
-
-
-
-
-
-
     lateinit var ratingBar:RatingBar
     lateinit var imgCondition:ImageView
-
-
-
     lateinit var weather:WeatherResponse
-
+    lateinit var forecast:Forecast
     private lateinit var shopFragmentViewModel: ShopFragmentViewModel
-    var day0 = Calendar.getInstance()
-    var day1 = Calendar.getInstance()
-    var day2 = Calendar.getInstance()
-    var day3 = Calendar.getInstance()
-    var day4 = Calendar.getInstance()
-    var day5 = Calendar.getInstance()
-    var day6 = Calendar.getInstance()
-    var day7 = Calendar.getInstance()
-    var day8 = Calendar.getInstance()
-    var day9 = Calendar.getInstance()
+    private lateinit var shop:Shop
+    private lateinit var latitude:String
+    private lateinit var longitude:String
     val displayDateFromater = SimpleDateFormat("EEE MM-dd")
     val requestDateFormatter = SimpleDateFormat("yyyy-MM-dd")
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,19 +80,12 @@ class ShopFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         shopFragmentViewModel = ViewModelProviders.of(this).get(ShopFragmentViewModel::class.java)
-        day1.add(Calendar.DAY_OF_WEEK,1)
-        day2.add(Calendar.DAY_OF_WEEK,2)
-        day3.add(Calendar.DAY_OF_WEEK,3)
-        day4.add(Calendar.DAY_OF_WEEK,4)
-        day5.add(Calendar.DAY_OF_WEEK,5)
-        day6.add(Calendar.DAY_OF_WEEK,6)
-        day7.add(Calendar.DAY_OF_WEEK,7)
-        day8.add(Calendar.DAY_OF_WEEK,8)
-        day9.add(Calendar.DAY_OF_WEEK,9)
+        shop = args.shop
+        latitude = shop.coordinates.latitude
+        longitude = shop.coordinates.longitude
         if(1>2) {
 
-
-            activity?.onBackPressedDispatcher?.addCallback(
+                    activity?.onBackPressedDispatcher?.addCallback(
                 this,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
@@ -114,7 +93,6 @@ class ShopFragment : Fragment() {
                             activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
                         val navController = navHostFragment.navController
                         navController.navigate(ShopFragmentDirections.actionShopFragmentToMapsFragment2())
-
                     }
                 })
         }
@@ -126,11 +104,13 @@ class ShopFragment : Fragment() {
          val view = inflater.inflate(R.layout.fragment_shop, container, false)
         tvName = view.findViewById(R.id.tvName)
         imageView = view.findViewById(R.id.shopImageView)
+        imgViewMap = view.findViewById(R.id.imgViewMap)
         tvCondition = view.findViewById(R.id.tvCondition)
         tvTemp = view.findViewById(R.id.tvTemp)
         tvDate = view.findViewById(R.id.tvDate)
         tvHumidity = view.findViewById(R.id.tvHumidity)
         tvPressure  = view.findViewById(R.id.tvPressure)
+        tvCategory = view.findViewById(R.id.tvShopCategory)
         ratingBar = view.findViewById(R.id.shopRatingBar)
         imgCondition = view.findViewById(R.id.imgCondition)
         btnNow  = view.findViewById(R.id.btnNow)
@@ -146,14 +126,8 @@ class ShopFragment : Fragment() {
         btnDay9  = view.findViewById(R.id.btnDay9)
         btnHourly  = view.findViewById(R.id.btnHourly)
 
-
-
-
-
         tvName.setOnClickListener{
-
         }
-
         return view
     }
 
@@ -162,121 +136,122 @@ class ShopFragment : Fragment() {
 
 
         //shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+args.shop.coordinates.longitude,"2020-12-31")
+        tvName.text = shop.name
+        tvCategory.text  = shop.categories[0].title
 
-        shopFragmentViewModel.fetchShopWeather(args.shop.coordinates.latitude+","+args.shop.coordinates.longitude)//"24.7394478,46.8098221"
+        shopFragmentViewModel.fetchShopWeather(latitude+","+longitude)//"24.7394478,46.8098221"
 
         shopFragmentViewModel.shopWeatherLiveData?.observe(
             viewLifecycleOwner,
             Observer {weatherRes->
 
                 weather = weatherRes
+                forecast = weatherRes.forecast
                 updateUi()
                 showCurrentWeather(weather)
-
             })
-
-
-
     }
-
     override fun onStart() {
+
+        imgViewMap.setOnClickListener {
+            val uri = Uri.parse("geo:0,0?q="+latitude+","+longitude)
+            //startActivity(Intent(Intent.ACTION_VIEW,uri))
+
+
+           // val gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988")
+
+            val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            startActivity(mapIntent)
+
+        }
         super.onStart()
         btnNow.setOnClickListener{
             showCurrentWeather(weather)
-
         }
-
         btnDay0.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day0.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(0)
         }
         btnDay1.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day1.time))
-            observeWeatherLiveData()
+            fetchShopWeatherByDay(1)
         }
         btnDay2.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day2.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(2)
         }
         btnDay3.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day3.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(3)
         }
         btnDay4.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day4.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(4)
         }
         btnDay5.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day5.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(5)
         }
         btnDay6.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day6.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(6)
         }
         btnDay7.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day7.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(7)
         }
         btnDay8.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day8.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(8)
         }
         btnDay9.setOnClickListener {
-            shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+
-                    args.shop.coordinates.longitude,requestDateFormatter.format(day9.time))
-            observeWeatherLiveData()
-
+            fetchShopWeatherByDay(9)
         }
-
         btnHourly.setOnClickListener {
-            
+            var listOfHours = forecast.forecastday[0].hours
+            val arrayListOfHours = arrayListOf<Hour>()
+            arrayListOfHours.addAll(listOfHours)
+
+            var fragmentManager = activity?.supportFragmentManager
+            HoursListFragment.newInstance(arrayListOfHours).apply {
+                if(fragmentManager != null){
+                    show(fragmentManager, DIALOG_HOURS)
+                }
+            }
+
         }
 
+
+    }
+    private  fun fetchShopWeatherByDay(numOfDay:Int){
+        shopFragmentViewModel.fetchShopWeatherByDay(latitude+","+
+                longitude,requestDateFormatter.format(day(numOfDay).time))
+        observeWeatherLiveData()
+    }
+    private  fun day(numOfDay:Int):Calendar{
+        var day = Calendar.getInstance()
+        day.add(Calendar.DAY_OF_WEEK,numOfDay)
+
+        return day
 
     }
     private fun observeWeatherLiveData(){
         shopFragmentViewModel.shopWeatherLiveData?.observe(
             viewLifecycleOwner,
             Observer {weatherRes->
-                var forecast = weatherRes.forecast
+                 forecast = weatherRes.forecast
                 showDayWeather(forecast.forecastday[0])
 
             })
 
     }
     private fun updateUi(){
-        Picasso.get().load(args.shop.imageUrl).resize(370,350)
+        Picasso.get().load(args.shop.imageUrl).resize(385,350)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView)
         tvName.text = args.shop.name
         ratingBar.rating = args.shop.rating.toFloat()
-         btnDay1.text =displayDateFromater.format(day1.time)
-        btnDay2.text = requestDateFormatter.format(day2.time)
-        btnDay3.text =displayDateFromater.format(day3.time)
-        btnDay4.text = requestDateFormatter.format(day4.time)
-        btnDay5.text =displayDateFromater.format(day5.time)
-        btnDay6.text = requestDateFormatter.format(day6.time)
-        btnDay7.text =displayDateFromater.format(day7.time)
-        btnDay8.text = requestDateFormatter.format(day8.time)
-        btnDay9.text =displayDateFromater.format(day9.time)
+         btnDay1.text =displayDateFromater.format(day(1).time)
+        btnDay2.text = displayDateFromater.format(day(2).time)
+        btnDay3.text =displayDateFromater.format(day(3).time)
+        btnDay4.text = displayDateFromater.format(day(4).time)
+        btnDay5.text =displayDateFromater.format(day(5).time)
+        btnDay6.text = displayDateFromater.format(day(6).time)
+        btnDay7.text =displayDateFromater.format(day(7).time)
+        btnDay8.text = displayDateFromater.format(day(8).time)
+        btnDay9.text =displayDateFromater.format(day(9).time)
 
 
 
@@ -297,17 +272,16 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
 
 }
     private fun showDayWeather(forecastday:Forecastday){
-        Picasso.get().load(args.shop.imageUrl).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
+        Picasso.get().load(shop.imageUrl).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView)
        val day = forecastday.day
         val astro =forecastday.astro
-        tvName.text = args.shop.name
         tvCondition.text =day.condition.text
         tvTemp.text = day.avgTemp
         tvHumidity.text = day.avgHumidity
         tvPressure.text= day.maxTemp
-        tvDate.text = weather.forecast.forecastday[0].date
-        ratingBar.rating = args.shop.rating.toFloat()
+        tvDate.text = forecastday.date
+        ratingBar.rating = shop.rating.toFloat()
         Picasso.get().load("https:"+day.condition.icon).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
             .into(imgCondition)
 
