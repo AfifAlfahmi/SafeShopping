@@ -125,8 +125,6 @@ class FavoriteListFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.shop_list_menu, menu)
 
-        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
-        val searchView = searchItem.actionView as SearchView
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

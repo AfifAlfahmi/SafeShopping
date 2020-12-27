@@ -6,20 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ShopsListFragment">
 
+
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="161dp"
         android:layout_height="30dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="88dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shopsRecyclerView"
-        android:layout_width="363dp"
-        android:layout_height="540dp"
+        android:layout_width="350dp"
+        android:layout_height="456dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="4dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,11 +31,11 @@
         android:id="@+id/btnMap"
         android:layout_width="102dp"
         android:layout_height="41dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="68dp"
         android:text="Map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -44,4 +45,72 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="377dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/design_default_color_background"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.352"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_view"
+
+        style="@style/MaterialSearchViewStyle"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="376dp"
+        android:layout_height="114dp"
+        android:layout_marginTop="4dp"
+        android:background="@null"
+        android:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopsRecyclerView">
+
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="18dp"
+            app:backgroundTint="@color/brown"
+            app:fabCradleMargin="5dp"
+            app:fabCradleRoundedCornerRadius="10dp"
+            app:fabCradleVerticalOffset="3dp"
+            app:hideOnScroll="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/coordinatorLayout" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bottomAppBarBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gray"
+            android:src="@drawable/ic_google_maps"
+            app:layout_anchor="@+id/bottomAppBar"
+            app:layout_anchorGravity="top|center"
+
+            app:maxImageSize="35dp"
+            app:tint="@null" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

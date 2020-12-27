@@ -95,7 +95,7 @@ class FetchShops {
 
         val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
         yelpApi.fetchShops("Bearer $API_KEY",

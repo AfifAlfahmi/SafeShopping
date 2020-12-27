@@ -1,6 +1,8 @@
 package com.bignerdranch.android.safeshopping
 
+import android.app.SearchManager
 import android.content.Context
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
@@ -10,13 +12,17 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.cursoradapter.widget.CursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.miguelcatalan.materialsearchview.MaterialSearchView
 import com.squareup.picasso.Picasso
 
 
@@ -33,6 +39,10 @@ class ShopsListFragment : Fragment() {
     private lateinit var shopsRecyclerView: RecyclerView
     private lateinit var btnMap: Button
     private lateinit var progressBar: ProgressBar
+   lateinit var matSearchView:MaterialSearchView
+    lateinit var toolBar:androidx.appcompat.widget.Toolbar
+    var searchList= mutableListOf<String>()
+
 
     private lateinit var shopsListViewModel: ShopsListViewModel
 
@@ -40,7 +50,9 @@ class ShopsListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        shopsListViewModel = ViewModelProviders.of(this).get(ShopsListViewModel::class.java)
+
+
+            shopsListViewModel = ViewModelProviders.of(this).get(ShopsListViewModel::class.java)
         setHasOptionsMenu(true)
         arguments?.let {
             if(it.getDouble(ARG_LAT) != null){
@@ -62,6 +74,10 @@ class ShopsListFragment : Fragment() {
         shopsRecyclerView = view.findViewById(R.id.shopsRecyclerView)
         btnMap = view.findViewById(R.id.btnMap)
         progressBar =view.findViewById(R.id.progressBar)
+        matSearchView = view.findViewById(R.id.search_view)
+        toolBar = view.findViewById(R.id.toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolBar)
+        (activity as AppCompatActivity).supportActionBar?.title = ""
         progressBar.visibility = View.GONE
 
          val fetchShops = FetchShops()
@@ -71,7 +87,7 @@ class ShopsListFragment : Fragment() {
 
             //findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
 
-            val action = ShopsListFragmentDirections.actionShopsListFragmentToFavoriteListFragment()
+            val action = ShopsListFragmentDirections.actionShopsListFragmentToMapsFragment()
             findNavController().navigate(action)
 
 
@@ -100,6 +116,9 @@ class ShopsListFragment : Fragment() {
             Log.d(TAG,"network  Available")
 
         }
+
+        shopsListViewModel.getSearchTerms()
+        observeSearchLiveData()
 
         Log.d(TAG,"onView Created")
 
@@ -152,26 +171,50 @@ class ShopsListFragment : Fragment() {
 
                 }
             })
-        cm.unregisterNetworkCallback(ConnectivityManager.NetworkCallback())
+//        cm.unregisterNetworkCallback(ConnectivityManager.NetworkCallback())
         return internetConnection
     }
 
+fun observeSearchLiveData(){
+    shopsListViewModel.searchListLiveData.observe(
+        viewLifecycleOwner, Observer {
+            searchList.clear()
+            it.map {
+                searchList.add(it.searchTerm)
+                matSearchView.setSuggestions(searchList.toTypedArray())
+            }
+        }
+    )
+}
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.shop_list_menu, menu)
 
+       var search:Search
         val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
-        val searchView = searchItem.actionView as SearchView
-        searchView.apply {
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+
+        matSearchView.setEllipsize(true)
+        matSearchView.setMenuItem(searchItem)
+
+
+
+
+
+        matSearchView.setVoiceSearch(true)
+           matSearchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
+
                 override fun onQueryTextSubmit(searchTerm: String): Boolean {
                     Log.d(TAG, "QueryTextSubmit: $searchTerm")
                     progressBar.visibility = View.VISIBLE
                     shopsListViewModel.searchShops(searchTerm)
-                    searchView.onActionViewCollapsed()
+                    matSearchView.closeSearch()
+                    search = Search(searchTerm)
+                    shopsListViewModel.addSearchTerm(search)
 
+                    observeSearchLiveData()
                     shopsListViewModel.shopsListLiveData.observe(
                         viewLifecycleOwner,
                         Observer { shopsList ->
@@ -186,22 +229,46 @@ class ShopsListFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(queryText: String): Boolean {
+
+                    matSearchView.setSuggestions(searchList.toTypedArray())
+
                     Log.d(TAG, "QueryTextChange: $queryText")
                     return false
                 }
             }
             )
-        }
+
+
+        matSearchView.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
+            override fun onSearchViewClosed() {
+
+            }
+
+            override fun onSearchViewShown() {
+            }
+
+        })
+
+
+
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {R.id.menu_item_clear -> {
-            //photoGalleryViewModel.fetchPhotos("")
+            var emptyList = resources.getStringArray(R.array.empty_list)
+
+
+            searchList.clear()
+            shopsListViewModel.deleteSearchTerms()
+
+            matSearchView.setSuggestions(emptyList)
              Toast.makeText(context,"cleared",Toast.LENGTH_LONG).show()
             true
         }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 
     private inner class ShopHolder(view: View)
         : RecyclerView.ViewHolder(view),View.OnClickListener {
