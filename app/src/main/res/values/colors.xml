@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#ffff00</color>
     <color name="gray">#bfbfbf</color>
+    <color name="day_btn_color">#606060</color>
 </resources>

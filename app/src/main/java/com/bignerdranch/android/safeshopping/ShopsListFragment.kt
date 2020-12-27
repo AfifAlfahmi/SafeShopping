@@ -3,7 +3,6 @@ package com.bignerdranch.android.safeshopping
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkInfo
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +14,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +29,6 @@ private const val TAG = "ShopsListFragment"
 
 class ShopsListFragment : Fragment() {
 
-    private var long: Double? = null
     lateinit var tvLocation:TextView
     private lateinit var shopsRecyclerView: RecyclerView
     private lateinit var btnMap: Button
@@ -74,7 +71,7 @@ class ShopsListFragment : Fragment() {
 
             //findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
 
-            val action = ShopsListFragmentDirections.actionShopsListFragmentToMapsFragment()
+            val action = ShopsListFragmentDirections.actionShopsListFragmentToFavoriteListFragment()
             findNavController().navigate(action)
 
 
@@ -212,8 +209,8 @@ class ShopsListFragment : Fragment() {
         private lateinit var shop: Shop
         private val tvShpoName: TextView = itemView.findViewById(R.id.tvShopName)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
-        private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+        private val tvDistance: TextView = itemView.findViewById(R.id.tvDistanceInKilo)
         private val imageViewShop: ImageView = itemView.findViewById(R.id.imageView)
 
         init {
@@ -226,11 +223,13 @@ class ShopsListFragment : Fragment() {
 
         fun bindGalleryItem(shop: Shop) {
             this.shop=shop
+            var distanceInKilo = shop.distanceInMeters/1000
+            val roundedDistanceInKilo = String.format("%.2f", distanceInKilo)
 
             tvShpoName.text =shop.name
             ratingBar.rating = shop.rating.toFloat()
-            tvAddress.text = shop.location.address
-            tvCategory.text = shop.categories[0].title
+            tvDistance.text = roundedDistanceInKilo+"km"
+            tvCategory.text = "Category "+shop.categories[0].title
             Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)
                 .into(imageViewShop)
 

@@ -69,6 +69,8 @@ class HoursListFragment:BottomSheetDialogFragment() {
         private val tvHourTemp: TextView = itemView.findViewById(R.id.tvHourTemp)
         private val tvHourTime: TextView = itemView.findViewById(R.id.tvHourTime)
         private val tvHourCondition: TextView = itemView.findViewById(R.id.tvHourCondition)
+        private val tvHourHumidity: TextView = itemView.findViewById(R.id.tvHourHumidity)
+
         private val imgViewHour: ImageView = itemView.findViewById(R.id.imgViewHour)
         private val imgViewShow: ImageView = itemView.findViewById(R.id.imgViewShow)
 
@@ -105,6 +107,7 @@ class HoursListFragment:BottomSheetDialogFragment() {
             tvHourTemp.text =hour.temp
 
             tvHourCondition.text =hour.condition.text
+            tvHourHumidity.text = hour.humidity
 
 
             Picasso.get().load("https:"+hour.condition.icon).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)

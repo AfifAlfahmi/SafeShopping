@@ -4,6 +4,7 @@
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
+    android:id="@+id/tvShopDistance"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ShopFragment">
@@ -25,9 +26,8 @@
         android:layout_width="282dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="TextView"
         android:textAlignment="center"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:numStars="5"
         android:progressBackgroundTint="@color/gray"
         android:progressTint="@color/yellow"
@@ -56,8 +55,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView7"
         android:layout_width="355dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="44dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="74dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopRatingBar"
@@ -80,7 +79,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Now"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/purple_700"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay0"
@@ -89,7 +89,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Today"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay1"
@@ -98,7 +99,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Wed 21"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay2"
@@ -107,7 +109,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay3"
@@ -116,7 +119,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay4"
@@ -125,7 +129,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay5"
@@ -134,7 +139,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay6"
@@ -143,7 +149,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay7"
@@ -152,7 +159,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay8"
@@ -161,7 +169,8 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnDay9"
@@ -170,15 +179,16 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="thr 22"
-                    android:textColor="@color/purple_700" />
+                    android:textColor="@color/day_btn_color"
+                    android:textSize="13sp" />
             </LinearLayout>
         </HorizontalScrollView>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="331dp"
-        android:layout_height="152dp"
-        android:layout_marginTop="100dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopRatingBar"
@@ -187,14 +197,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="336dp"
-            android:layout_height="143dp"
+            android:layout_height="120dp"
             android:background="@color/gray"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView4"
                 android:layout_width="96dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toStartOf="@+id/cardView2"
                 app:layout_constraintHorizontal_bias="0.617"
@@ -206,7 +216,7 @@
                 <TextView
                     android:id="@+id/tvDate"
                     android:layout_width="95dp"
-                    android:layout_height="36dp"
+                    android:layout_height="30dp"
                     android:background="@color/white"
                     android:textAlignment="center"
                     android:textColor="@color/purple_700"
@@ -216,7 +226,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="95dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +237,7 @@
                 <TextView
                     android:id="@+id/tvCondition"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:background="@color/white"
                     android:textAlignment="center"
                     android:textColor="@color/purple_700" />
@@ -236,7 +246,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
                 android:layout_width="95dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -247,7 +257,7 @@
                 <TextView
                     android:id="@+id/tvTemp"
                     android:layout_width="93dp"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:background="@color/white"
                     android:textAlignment="center"
                     android:textColor="@color/purple_700" />
@@ -256,7 +266,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView3"
                 android:layout_width="95dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +277,7 @@
                 <ImageView
                     android:id="@+id/imgCondition"
                     android:layout_width="95dp"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_weight="1"
                     android:src="@drawable/clear_weather" />
             </androidx.cardview.widget.CardView>
@@ -275,7 +285,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView5"
                 android:layout_width="95dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintStart_toEndOf="@+id/cardView3"
@@ -286,14 +296,14 @@
                 <TextView
                     android:id="@+id/tvHumidity"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="30dp"
                     android:textAlignment="center"
                     android:textColor="@color/purple_700" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="95dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintStart_toEndOf="@+id/cardView5"
@@ -304,7 +314,7 @@
                 <TextView
                     android:id="@+id/tvPressure"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="30dp"
                     android:textAlignment="center"
                     android:textColor="@color/purple_700" />
             </androidx.cardview.widget.CardView>
@@ -326,10 +336,11 @@
 
     <TextView
         android:id="@+id/tvShopCategory"
-        android:layout_width="87dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="10dp"
-        android:textAlignment="center"
+        android:layout_width="159dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/shopRatingBar"
         app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
 
@@ -338,18 +349,52 @@
         android:layout_width="75dp"
         android:layout_height="38dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="28dp"
         android:src="@drawable/map_icon"
-        app:layout_constraintStart_toEndOf="@+id/tvShopCategory"
-        app:layout_constraintTop_toBottomOf="@+id/shopImageView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvShopCategory" />
 
     <ImageView
         android:id="@+id/imgFavorite"
         android:layout_width="50dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="212dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
-        android:src="@drawable/ic_favorite"
+        android:src="@mipmap/book_mark"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopRatingBar" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="44dp"
+        android:background="#c0c0c0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopRatingBar" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="100dp"
+        android:layout_height="26dp"
+        android:text="Weather"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView7"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2" />
+
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="69dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/imgFavorite"
         app:layout_constraintTop_toBottomOf="@+id/tvShopCategory" />
 
 

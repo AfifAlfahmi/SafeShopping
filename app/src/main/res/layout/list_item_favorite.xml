@@ -8,12 +8,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:textAlignment="center"
     cardView:cardCornerRadius="8dp"
     cardView:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="144dp">
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp">
 
 
         <androidx.cardview.widget.CardView
@@ -21,8 +23,8 @@
             android:id="@+id/imageCradView"
             android:layout_width="125dp"
             android:layout_height="125dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="80dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             cardView:cardCornerRadius="15dp"
@@ -30,22 +32,21 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cornerRadius="20sp"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
                 android:scaleType="centerCrop"
+                app:cornerRadius="20sp"
                 cardView:layout_constraintStart_toStartOf="parent"
                 cardView:layout_constraintTop_toTopOf="parent"
-                cardView:srcCompat="@drawable/shop_placeholder"
-                />
+                cardView:srcCompat="@drawable/shop_placeholder" />
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvShopName"
-            android:layout_width="208dp"
+            android:layout_width="195dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="80dp"
 
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -58,15 +59,18 @@
             style="@android:style/Widget.Material.Light.RatingBar.Indicator"
             android:layout_width="181dp"
             android:layout_height="31dp"
-            android:layout_marginEnd="28dp"
-            android:numStars="5"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="4dp"
 
+            android:layout_marginEnd="36dp"
+            android:numStars="5"
             android:progressBackgroundTint="@color/gray"
             android:progressTint="@color/yellow"
             android:rating="1.5"
             android:stepSize="0.5"
             android:theme="@style/RatingBar"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageCradView"
             app:layout_constraintTop_toBottomOf="@+id/tvShopName" />
 
         <TextView
@@ -75,7 +79,6 @@
             android:layout_height="41dp"
             android:layout_marginStart="8dp"
             android:text="Riyadh"
-            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/imageCradView"
             app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
@@ -83,11 +86,44 @@
             android:id="@+id/tvDistanceInKilo"
             android:layout_width="102dp"
             android:layout_height="42dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:text="Break Fast"
-            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/tvCategory"
             app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="159dp"
+            android:layout_height="29dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="36dp"
+            android:textAlignment="center"
+            android:textColor="@color/purple_700"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+
+            android:layout_width="125dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="25dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            cardView:cardCornerRadius="15dp"
+            cardView:cardElevation="8dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/colorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

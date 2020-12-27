@@ -17,12 +17,12 @@
 
         <TextView
             android:id="@+id/tvHourTime"
-            android:layout_width="116dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="92dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="28dp"
             android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imgViewShow"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -47,21 +47,11 @@
 
             <TextView
                 android:id="@+id/tvHourTemp"
-                android:layout_width="89dp"
-                android:layout_height="46dp"
+                android:layout_width="90dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/tvHourCondition"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvHourCondition"
-                android:layout_width="96dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintStart_toEndOf="@+id/imgViewHour"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -69,10 +59,31 @@
                 android:layout_width="112dp"
                 android:layout_height="47dp"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/clear_weather" />
+
+            <TextView
+                android:id="@+id/tvHourHumidity"
+                android:layout_width="90dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="22dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/tvHourTemp"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvHourCondition"
+            android:layout_width="96dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvHourTime"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

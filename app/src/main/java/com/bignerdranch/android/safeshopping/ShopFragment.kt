@@ -1,8 +1,10 @@
  package com.bignerdranch.android.safeshopping
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -25,9 +28,10 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.roundToInt
 
 
-private const val ARG_PARAM1 = "param1"
+ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val TAG = "ShopFragment"
 private const val DIALOG_HOURS = "DialogHours"
@@ -49,6 +53,8 @@ class ShopFragment : Fragment() {
     lateinit var tvDate:TextView
     lateinit var tvHumidity:TextView
     lateinit var tvPressure:TextView
+    lateinit var tvDistance:TextView
+
 
     lateinit var btnNow:Button
     lateinit var btnDay0:Button
@@ -72,6 +78,8 @@ class ShopFragment : Fragment() {
     private lateinit var longitude:String
     val displayDateFromater = SimpleDateFormat("EEE MM-dd")
     val requestDateFormatter = SimpleDateFormat("yyyy-MM-dd")
+    lateinit var imgViewFavorite:ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,10 +114,12 @@ class ShopFragment : Fragment() {
         imageView = view.findViewById(R.id.shopImageView)
         imgViewMap = view.findViewById(R.id.imgViewMap)
         tvCondition = view.findViewById(R.id.tvCondition)
+        imgViewFavorite = view.findViewById(R.id.imgFavorite)
         tvTemp = view.findViewById(R.id.tvTemp)
         tvDate = view.findViewById(R.id.tvDate)
         tvHumidity = view.findViewById(R.id.tvHumidity)
         tvPressure  = view.findViewById(R.id.tvPressure)
+        tvDistance  = view.findViewById(R.id.tvDistance)
         tvCategory = view.findViewById(R.id.tvShopCategory)
         ratingBar = view.findViewById(R.id.shopRatingBar)
         imgCondition = view.findViewById(R.id.imgCondition)
@@ -137,7 +147,10 @@ class ShopFragment : Fragment() {
 
         //shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+args.shop.coordinates.longitude,"2020-12-31")
         tvName.text = shop.name
-        tvCategory.text  = shop.categories[0].title
+        tvCategory.text  = "Category: "+shop.categories[0].title
+        var distanceInKilo = shop.distanceInMeters/1000
+        val roundedDistanceInKilo = String.format("%.2f", distanceInKilo)
+        tvDistance.text = roundedDistanceInKilo+"km"
 
         shopFragmentViewModel.fetchShopWeather(latitude+","+longitude)//"24.7394478,46.8098221"
 
@@ -152,6 +165,7 @@ class ShopFragment : Fragment() {
             })
     }
     override fun onStart() {
+        super.onStart()
 
         imgViewMap.setOnClickListener {
             val uri = Uri.parse("geo:0,0?q="+latitude+","+longitude)
@@ -165,39 +179,70 @@ class ShopFragment : Fragment() {
             startActivity(mapIntent)
 
         }
-        super.onStart()
+        imgViewFavorite.setOnClickListener {
+            var fragmentManager = activity?.supportFragmentManager
+            FavoriteFragment.newInstance(shop).apply {
+                if(fragmentManager != null){
+                    show(fragmentManager, DIALOG_HOURS)
+                }
+            }
+
+        }
         btnNow.setOnClickListener{
             showCurrentWeather(weather)
+            changeBtnsTextColor()
+            btnNow.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay0.setOnClickListener {
             fetchShopWeatherByDay(0)
+            changeBtnsTextColor()
+            btnDay0.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay1.setOnClickListener {
             fetchShopWeatherByDay(1)
+            changeBtnsTextColor()
+            btnDay1.setTextColor(getColor(requireContext(),R.color.purple_700))
+
         }
         btnDay2.setOnClickListener {
             fetchShopWeatherByDay(2)
+            changeBtnsTextColor()
+            btnDay2.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay3.setOnClickListener {
             fetchShopWeatherByDay(3)
+            changeBtnsTextColor()
+            btnDay3.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay4.setOnClickListener {
             fetchShopWeatherByDay(4)
+            changeBtnsTextColor()
+            btnDay4.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay5.setOnClickListener {
             fetchShopWeatherByDay(5)
+            changeBtnsTextColor()
+            btnDay5.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay6.setOnClickListener {
             fetchShopWeatherByDay(6)
+            changeBtnsTextColor()
+            btnDay6.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay7.setOnClickListener {
             fetchShopWeatherByDay(7)
+            changeBtnsTextColor()
+            btnDay7.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay8.setOnClickListener {
             fetchShopWeatherByDay(8)
+            changeBtnsTextColor()
+            btnDay8.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay9.setOnClickListener {
             fetchShopWeatherByDay(9)
+            changeBtnsTextColor()
+            btnDay9.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnHourly.setOnClickListener {
             var listOfHours = forecast.forecastday[0].hours
@@ -220,6 +265,21 @@ class ShopFragment : Fragment() {
                 longitude,requestDateFormatter.format(day(numOfDay).time))
         observeWeatherLiveData()
     }
+
+    private fun changeBtnsTextColor(){
+        btnNow.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay0.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay1.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay2.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay3.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay4.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay5.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay6.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay7.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay8.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+        btnDay9.setTextColor(getColor(requireContext(),R.color.day_btn_color))
+
+    }
     private  fun day(numOfDay:Int):Calendar{
         var day = Calendar.getInstance()
         day.add(Calendar.DAY_OF_WEEK,numOfDay)
@@ -238,10 +298,12 @@ class ShopFragment : Fragment() {
 
     }
     private fun updateUi(){
-        Picasso.get().load(args.shop.imageUrl).resize(385,350)
+
+        Picasso.get().load(args.shop.imageUrl).resize(410,350)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView)
-        tvName.text = args.shop.name
+        tvName.text = shop.name
+
         ratingBar.rating = args.shop.rating.toFloat()
          btnDay1.text =displayDateFromater.format(day(1).time)
         btnDay2.text = displayDateFromater.format(day(2).time)
@@ -262,6 +324,7 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
     lateinit var currentWearher:CurrentWeather
     currentWearher =weatherResponse.current
     tvCondition.text = currentWearher.condition.text
+    Log.d(TAG,currentWearher.condition.text)
     tvTemp.text = currentWearher.temp
     tvHumidity.text = currentWearher.humidity
     tvPressure.text= currentWearher.pressure
@@ -272,11 +335,15 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
 
 }
     private fun showDayWeather(forecastday:Forecastday){
-        Picasso.get().load(shop.imageUrl).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
-            .into(imageView)
+
        val day = forecastday.day
         val astro =forecastday.astro
-        tvCondition.text =day.condition.text
+        if(day.condition.text == "Patchy rain possible"){
+            tvCondition.text ="Patchy rain"
+        }
+
+        Log.d(TAG,day.condition.text)
+
         tvTemp.text = day.avgTemp
         tvHumidity.text = day.avgHumidity
         tvPressure.text= day.maxTemp
