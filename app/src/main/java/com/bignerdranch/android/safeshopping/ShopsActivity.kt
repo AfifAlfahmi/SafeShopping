@@ -20,6 +20,8 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private const val TAG = "ShopsActivity"
 
@@ -30,12 +32,16 @@ class ShopsActivity : AppCompatActivity() {
     private val locationPermissionCode = 1
     lateinit var locationManager: LocationManager
     private lateinit var navController: NavController
+    private lateinit var bottomNavigationView : BottomNavigationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shops)
         navController = findNavController(R.id.fragment)
-        val intent = Intent(this, ShopsListFragment::class.java)
+        bottomNavigationView = findViewById(R.id.bottmNavigationView)
+
+        bottomNavigationView.setupWithNavController(navController)
 
 
         getLocation()
@@ -122,10 +128,10 @@ class ShopsActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onSupportNavigateUp(): Boolean {
-//        return findNavController(R.id.fragment).navigateUp()
-//                ||  super.onSupportNavigateUp()
-//    }
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.fragment).navigateUp()
+                ||  super.onSupportNavigateUp()
+    }
     fun navigateToShopsListFragment(){
 
 
