@@ -10,6 +10,8 @@ class ShopsListViewModel : ViewModel() {
     var shopsListLiveData: LiveData<List<Shop>>
     private val shopRepository = ShopRepository.get()
     lateinit var shopsLocalListLiveData :LiveData<List<Shop>>
+    lateinit var searchListLiveData :LiveData<List<Search>>
+
     private val fetchShops = FetchShops()
 
     init {
@@ -33,6 +35,17 @@ class ShopsListViewModel : ViewModel() {
         shopsLocalListLiveData = shopRepository.getShops()
     }
 
+
+    fun addSearchTerm(searchTerm: Search){
+         shopRepository.addSearchTerm(searchTerm)
+
+    }
+    fun getSearchTerms(){
+        searchListLiveData = shopRepository.getSearchTerms()
+    }
+    fun deleteSearchTerms(){
+        shopRepository.deleteSearchTerms()
+    }
 
 
 }

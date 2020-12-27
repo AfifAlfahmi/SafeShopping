@@ -122,8 +122,6 @@ class MapsFragment : Fragment() {
                     navController.navigate(MapsFragmentDirections.actionMapsFragmentToShopFragment(shop))
 
 
-
-
     }
     private  fun drawMarker(googleMap:GoogleMap){
         for (shopItem in shopsList) {

@@ -28,11 +28,12 @@
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action
-            android:id="@+id/action_mapsFragment_to_shopsListFragment"
-            app:destination="@id/shopsListFragment" />
-        <action
             android:id="@+id/action_mapsFragment_to_shopFragment"
             app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_shopsListFragment"
+            app:destination="@id/shopsListFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/shopFragment"

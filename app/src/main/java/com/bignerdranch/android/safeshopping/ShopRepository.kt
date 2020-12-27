@@ -20,6 +20,8 @@ class ShopRepository private constructor(context: Context) {
         context.applicationContext,ShopDatabase::class.java,DATABASE_NAME).build()
     private val shopDao = database.shopDao()
     private val favshopDao = database.favoriteshopDao()
+    private val searchDao = database.searchDao()
+
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -46,6 +48,23 @@ class ShopRepository private constructor(context: Context) {
 
         }
     fun getFavoritesShops(): LiveData<List<FavoriteShop>> = favshopDao.getFavoritesShops()
+
+    fun addSearchTerm(searchTerm: Search){
+        executor.execute{
+            searchDao.addSearchTerm(searchTerm)
+        }
+
+    }
+    fun getSearchTerms():LiveData<List<Search>> = searchDao.getSearchTerms()
+
+    fun deleteSearchTerms(){
+        executor.execute {
+            searchDao.deleteSearchTerms()
+
+        }
+    }
+
+
 
     companion object {
         private var INSTANCE: ShopRepository? = null

@@ -1,12 +1,15 @@
 package com.bignerdranch.android.safeshopping
 
+import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -32,6 +35,8 @@ class ShopsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shops)
         navController = findNavController(R.id.fragment)
+        val intent = Intent(this, ShopsListFragment::class.java)
+
 
         getLocation()
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -117,10 +122,10 @@ class ShopsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return findNavController(R.id.fragment).navigateUp()
-                ||  super.onSupportNavigateUp()
-    }
+//    override fun onSupportNavigateUp(): Boolean {
+//        return findNavController(R.id.fragment).navigateUp()
+//                ||  super.onSupportNavigateUp()
+//    }
     fun navigateToShopsListFragment(){
 
 
