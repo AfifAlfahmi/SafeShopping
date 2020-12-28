@@ -57,8 +57,7 @@ class FavoriteListFragment : Fragment() {
         progressBar =view.findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
 
-        val fetchShops = FetchShops()
-        fetchShops.fetchShops()
+
         shopsRecyclerView.layoutManager = GridLayoutManager(context, 1)
 
         return view
@@ -92,32 +91,7 @@ class FavoriteListFragment : Fragment() {
 
     }
 
-    fun isInternetConnected() :Boolean{
-        var internetConnection = true
-        val cm: ConnectivityManager =
-                context?.getSystemService(Context.CONNECTIVITY_SERVICE)    as ConnectivityManager
-        val builder: NetworkRequest.Builder = NetworkRequest.Builder()
 
-        cm.registerNetworkCallback(
-                builder.build(),
-                object : ConnectivityManager.NetworkCallback() {
-
-                    override fun onAvailable(network: Network) {
-
-
-                        internetConnection = true
-
-                    }
-
-                    override fun onLost(network: Network) {
-
-                        internetConnection = false
-
-                    }
-                })
-        cm.unregisterNetworkCallback(ConnectivityManager.NetworkCallback())
-        return internetConnection
-    }
 
 
 
@@ -143,34 +117,45 @@ class FavoriteListFragment : Fragment() {
         private lateinit var shop: FavoriteShop
         private val tvShpoName: TextView = itemView.findViewById(R.id.tvShopName)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
-        private val tvAddress: TextView = itemView.findViewById(R.id.tvCategory)
-        private val tvCategory: TextView = itemView.findViewById(R.id.tvDistanceInKilo)
+        private val tvDistance: TextView = itemView.findViewById(R.id.tvDistanceInKilo)
+        private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         private val colorLayout: ConstraintLayout = itemView.findViewById(R.id.colorLayout)
         private val imageViewShop: ImageView = itemView.findViewById(R.id.imageView)
+        private val imgViewDelete: ImageView = itemView.findViewById(R.id.imgDelete)
+
 
         init {
             itemView.setOnClickListener {
 //                val action = ShopsListFragmentDirections.actionShopsListFragmentToShopFragment(shop)
 //                findNavController().navigate(action)
             }
+            imgViewDelete.setOnClickListener {
+                favoritesListViewModel.deleteFavoriteShop(shop.id)
+
+            }
 
         }
 
+
         fun bindGalleryItem(shop: FavoriteShop) {
             this.shop=shop
+            var distanceInKilo = shop.distanceInMeters/1000
+            val roundedDistanceInKilo = String.format("%.2f", distanceInKilo)
             tvTitle.text = shop.title
             tvShpoName.text =shop.name
             ratingBar.rating = shop.rating.toFloat()
-            tvAddress.text = shop.location.address
-            tvCategory.text = shop.categories[0].title
+            tvDistance.text = roundedDistanceInKilo+"km"
+            tvCategory.text = "Category "+shop.categories[0].title
             colorLayout.setBackgroundColor(Color.parseColor(shop.color))
-            Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)
+            Picasso.get().load(shop.imageUrl).resize(125, 125 ).placeholder(R.drawable.ic_launcher_foreground)
                     .into(imageViewShop)
+
 
         }
 
         override fun onClick(v: View) {
+
         }
 
 

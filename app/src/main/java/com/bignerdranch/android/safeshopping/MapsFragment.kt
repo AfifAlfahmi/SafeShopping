@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 
 
 private const val TAG = "MapsFragment"
@@ -116,10 +117,21 @@ class MapsFragment : Fragment() {
     private  fun navigateToShopFragment(shop:Shop){
 
 
-                    val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
-                    val navController = navHostFragment.navController
+//                    val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
+//                    val navController = navHostFragment.navController
+//
+//                    navController.navigate(MapsFragmentDirections.actionMapsFragmentToShopFragment(shop))
+   try {
+       val action = MapsFragmentDirections.actionMapsFragmentToShopFragment(shop)
+       findNavController().navigate(action)
 
-                    navController.navigate(MapsFragmentDirections.actionMapsFragmentToShopFragment(shop))
+             }
+   catch (ex:Exception){
+
+
+   }
+
+
 
 
     }

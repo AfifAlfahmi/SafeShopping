@@ -35,11 +35,12 @@ class ShopRepository private constructor(context: Context) {
             shopDao.addShops(shopsList)
         }
     }
-    fun deleteShop(id:String) {
+    fun deleteShops(){
         executor.execute {
-            shopDao.deleteShop(id)
+            shopDao.deleteShops()
         }
     }
+
 
         fun addFavoriteShop(favShop:FavoriteShop){
             executor.execute{
@@ -47,6 +48,11 @@ class ShopRepository private constructor(context: Context) {
             }
 
         }
+    fun deleteFavoriteShop(id:String) {
+        executor.execute {
+            favshopDao.deleteFavoriteShop(id)
+        }
+    }
     fun getFavoritesShops(): LiveData<List<FavoriteShop>> = favshopDao.getFavoritesShops()
 
     fun addSearchTerm(searchTerm: Search){
