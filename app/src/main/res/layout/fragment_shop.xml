@@ -4,7 +4,6 @@
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/tvShopDistance"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ShopFragment">
@@ -25,7 +24,7 @@
         android:id="@+id/tvName"
         android:layout_width="282dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -198,137 +197,89 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="336dp"
             android:layout_height="120dp"
-            android:background="@color/gray"
+            android:background="@color/white"
             android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView4"
-                android:layout_width="96dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toStartOf="@+id/cardView2"
-                app:layout_constraintHorizontal_bias="0.617"
-                app:layout_constraintStart_toEndOf="@+id/cardView"
-                app:layout_constraintTop_toTopOf="parent"
-                cardView:cardCornerRadius="15dp"
-                cardView:cardElevation="8dp">
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="95dp"
-                    android:layout_height="30dp"
-                    android:background="@color/white"
-                    android:textAlignment="center"
-                    android:textColor="@color/purple_700"
-                    android:textSize="14sp" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
+            <TextView
+                android:id="@+id/tvSunrise"
                 android:layout_width="95dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="4dp"
+                android:background="@color/white"
+                android:textAlignment="center"
+                android:textColor="@color/purple_700"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/tvCondition"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCondition"
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/white"
+                android:textAlignment="center"
+                android:textColor="@color/purple_700"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                cardView:cardCornerRadius="15dp"
-                cardView:cardElevation="8dp">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvCondition"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@color/white"
-                    android:textAlignment="center"
-                    android:textColor="@color/purple_700" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView2"
+            <TextView
+                android:id="@+id/tvTemp"
                 android:layout_width="95dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/white"
+                android:textAlignment="center"
+                android:textColor="@color/purple_700"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                cardView:cardCornerRadius="15dp"
-                cardView:cardElevation="8dp">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvTemp"
-                    android:layout_width="93dp"
-                    android:layout_height="30dp"
-                    android:background="@color/white"
-                    android:textAlignment="center"
-                    android:textColor="@color/purple_700" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView3"
-                android:layout_width="95dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
+            <ImageView
+                android:id="@+id/imgCondition"
+                android:layout_width="87dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:src="@drawable/clear_weather"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView"
-                cardView:cardCornerRadius="15dp"
-                cardView:cardElevation="8dp">
+                app:layout_constraintTop_toBottomOf="@+id/tvCondition" />
 
-                <ImageView
-                    android:id="@+id/imgCondition"
-                    android:layout_width="95dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/clear_weather" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView5"
+            <TextView
+                android:id="@+id/tvHumidity"
                 android:layout_width="95dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintStart_toEndOf="@+id/cardView3"
-                app:layout_constraintTop_toBottomOf="@+id/cardView4"
-                cardView:cardCornerRadius="15dp"
-                cardView:cardElevation="8dp">
-
-                <TextView
-                    android:id="@+id/tvHumidity"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/purple_700" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="95dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintStart_toEndOf="@+id/cardView5"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2"
-                cardView:cardCornerRadius="15dp"
-                cardView:cardElevation="8dp">
-
-                <TextView
-                    android:id="@+id/tvPressure"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/purple_700" />
-            </androidx.cardview.widget.CardView>
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:textAlignment="center"
+                android:textColor="@color/purple_700"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTemp" />
 
             <Button
                 android:id="@+id/btnHourly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="35dp"
                 android:text="Hourly"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.489"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+                app:layout_constraintTop_toBottomOf="@+id/tvSunrise" />
+
+            <TextView
+                android:id="@+id/tvMinTemp"
+                android:layout_width="95dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
+                android:textAlignment="center"
+                android:textColor="@color/purple_700"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTemp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

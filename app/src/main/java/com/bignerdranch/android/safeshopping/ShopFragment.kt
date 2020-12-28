@@ -1,11 +1,9 @@
  package com.bignerdranch.android.safeshopping
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +13,15 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getColor
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.safeshopping.weatherapi.*
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.math.roundToInt
 
 
  private const val ARG_PARAM1 = "param1"
@@ -52,8 +45,8 @@ class ShopFragment : Fragment() {
     lateinit var tvTemp:TextView
     lateinit var tvDate:TextView
     lateinit var tvHumidity:TextView
-    lateinit var tvPressure:TextView
     lateinit var tvDistance:TextView
+    lateinit var tvMinTemp:TextView
 
 
     lateinit var btnNow:Button
@@ -116,10 +109,10 @@ class ShopFragment : Fragment() {
         tvCondition = view.findViewById(R.id.tvCondition)
         imgViewFavorite = view.findViewById(R.id.imgFavorite)
         tvTemp = view.findViewById(R.id.tvTemp)
-        tvDate = view.findViewById(R.id.tvDate)
+        tvDate = view.findViewById(R.id.tvSunrise)
         tvHumidity = view.findViewById(R.id.tvHumidity)
-        tvPressure  = view.findViewById(R.id.tvPressure)
         tvDistance  = view.findViewById(R.id.tvDistance)
+        tvMinTemp = view.findViewById(R.id.tvMinTemp)
         tvCategory = view.findViewById(R.id.tvShopCategory)
         ratingBar = view.findViewById(R.id.shopRatingBar)
         imgCondition = view.findViewById(R.id.imgCondition)
@@ -325,10 +318,12 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
     currentWearher =weatherResponse.current
     tvCondition.text = currentWearher.condition.text
     Log.d(TAG,currentWearher.condition.text)
-    tvTemp.text = currentWearher.temp
-    tvHumidity.text = currentWearher.humidity
-    tvPressure.text= currentWearher.pressure
-    tvDate.text = weatherResponse.forecast.forecastday[0].date
+    tvTemp.text = currentWearher.temp+8451.toChar()
+    tvHumidity.text = currentWearher.humidity+" H"
+    tvDate.text = currentWearher.pressure+" P"
+    tvMinTemp.visibility = View.GONE
+    tvHumidity.visibility = View.VISIBLE
+
     Picasso.get().load("https:"+currentWearher.condition.icon).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
         .into(imgCondition)
 
@@ -344,10 +339,13 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
 
         Log.d(TAG,day.condition.text)
 
-        tvTemp.text = day.avgTemp
-        tvHumidity.text = day.avgHumidity
-        tvPressure.text= day.maxTemp
-        tvDate.text = forecastday.date
+        tvTemp.text = "max "+day.maxTemp+8451.toChar()
+        tvHumidity.visibility = View.GONE
+
+        tvDate.text = "sunrise "+forecastday.astro.sunrise
+        tvMinTemp.text = "min "+day.minTemp+8451.toChar()
+        tvMinTemp.visibility = View.VISIBLE
+
         ratingBar.rating = shop.rating.toFloat()
         Picasso.get().load("https:"+day.condition.icon).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
             .into(imgCondition)

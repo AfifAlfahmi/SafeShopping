@@ -19,8 +19,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shopsRecyclerView"
-        android:layout_width="350dp"
-        android:layout_height="456dp"
+        android:layout_width="362dp"
+        android:layout_height="509dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="4dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,46 +71,7 @@
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-
-        android:id="@+id/coordinatorLayout"
-        android:layout_width="376dp"
-        android:layout_height="114dp"
-        android:layout_marginTop="4dp"
-        android:background="@null"
-        android:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shopsRecyclerView">
 
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="18dp"
-            app:backgroundTint="@color/brown"
-            app:fabCradleMargin="5dp"
-            app:fabCradleRoundedCornerRadius="10dp"
-            app:fabCradleVerticalOffset="3dp"
-            app:hideOnScroll="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/coordinatorLayout" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/bottomAppBarBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/gray"
-            android:src="@drawable/ic_google_maps"
-            app:layout_anchor="@+id/bottomAppBar"
-            app:layout_anchorGravity="top|center"
-
-            app:maxImageSize="35dp"
-            app:tint="@null" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

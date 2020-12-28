@@ -10,12 +10,12 @@ import retrofit2.http.Query
 interface WeatherApi {
 
 
-    @GET("forecast.json?key=fa5111ad1ee942d3bd1170025201512&days=2")
+    @GET("forecast.json?key=26cfcf64e8634ecb84891320202712&days=1")
     fun fetchWeather(
         @Query("q")loc:String
     ): Call<WeatherResponse>
 
-    @GET("forecast.json?key=fa5111ad1ee942d3bd1170025201512&days=2")
+    @GET("forecast.json?key=26cfcf64e8634ecb84891320202712&days=1")
     fun fetchWeatherByDay( @Query("q")loc:String,@Query("dt")day:String): Call<WeatherResponse>
 
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="Home"
+        android:id="@+id/shopsListFragment"
+        android:icon="@drawable/home_icon"/>
+
+    <item android:title="Map"
+        android:id="@+id/mapsFragment"
+        app:tint="@null"
+        android:icon="@drawable/ic_google_maps"/>
+
+    <item android:title="Book Mark"
+        android:id="@+id/favoriteListFragment"
+
+        android:icon="@drawable/book_mark"/>
+</menu>
