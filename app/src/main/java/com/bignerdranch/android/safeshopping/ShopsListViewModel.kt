@@ -9,21 +9,21 @@ class ShopsListViewModel : ViewModel() {
     var long: Double? = null
     var shopsListLiveData: LiveData<List<Shop>>
     private val shopRepository = ShopRepository.get()
+
     lateinit var shopsLocalListLiveData :LiveData<List<Shop>>
     lateinit var searchListLiveData :LiveData<List<Search>>
 
-    private val fetchShops = FetchShops()
 
     init {
-        shopsListLiveData = fetchShops.fetchShops()
+        shopsListLiveData = shopRepository.fetchShops()
     }
 
     fun fetchShops(){
-        shopsListLiveData =fetchShops.fetchShops()
+        shopsListLiveData =shopRepository.fetchShops()
 
     }
     fun searchShops(searchTerm:String){
-        shopsListLiveData =fetchShops.searchShops(searchTerm)
+        shopsListLiveData =shopRepository.searchShops(searchTerm)
 
     }
   fun addShops(shopsList:List<Shop>) {

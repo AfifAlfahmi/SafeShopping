@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
@@ -28,9 +29,26 @@ import java.util.*
 private const val ARG_PARAM2 = "param2"
 private const val TAG = "ShopFragment"
 private const val DIALOG_HOURS = "DialogHours"
+ private const val KILO = 1000
+ private const val FIRST_ITEM = 0
+ private const val DAY_0 = 0
+ private const val DAY_1 = 1
+ private const val DAY_2 = 2
+ private const val DAY_3 = 3
+ private const val DAY_4 = 4
+ private const val DAY_5 = 5
+ private const val DAY_6 = 6
+ private const val DAY_7 = 7
+ private const val DAY_8 = 8
+ private const val DAY_9 = 9
+ private const val SHOP_IMG_WIDTH = 410
+ private const val SHOP_IMG_HEIGHT = 350
+ private const val WEATHER_ICON_WIDTH = 370
+ private const val WEATHER_ICON_HEIGHT = 350
+ private const val TEMP_SYMBOL =8451
 
 
-class ShopFragment : Fragment() {
+ class ShopFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -69,8 +87,8 @@ class ShopFragment : Fragment() {
     private lateinit var shop:Shop
     private lateinit var latitude:String
     private lateinit var longitude:String
-    val displayDateFromater = SimpleDateFormat("EEE MM-dd")
-    val requestDateFormatter = SimpleDateFormat("yyyy-MM-dd")
+    val displayDateFromater = SimpleDateFormat()
+    val requestDateFormatter = SimpleDateFormat()
     lateinit var imgViewFavorite:ImageView
 
 
@@ -80,23 +98,13 @@ class ShopFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        displayDateFromater.applyPattern(getString(R.string.display_date_pattern))
+        requestDateFormatter.applyPattern(getString(R.string.request_date_pattern))
         shopFragmentViewModel = ViewModelProviders.of(this).get(ShopFragmentViewModel::class.java)
         shop = args.shop
         latitude = shop.coordinates.latitude
         longitude = shop.coordinates.longitude
-        if(1>2) {
 
-                    activity?.onBackPressedDispatcher?.addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        val navHostFragment =
-                            activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
-                        val navController = navHostFragment.navController
-                        navController.navigate(ShopFragmentDirections.actionShopFragmentToMapsFragment2())
-                    }
-                })
-        }
 
     }
 
@@ -138,14 +146,14 @@ class ShopFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        //shopFragmentViewModel.fetchShopWeatherByDay(args.shop.coordinates.latitude+","+args.shop.coordinates.longitude,"2020-12-31")
-        tvName.text = shop.name
-        tvCategory.text  = "Category: "+shop.categories[0].title
-        var distanceInKilo = shop.distanceInMeters/1000
-        val roundedDistanceInKilo = String.format("%.2f", distanceInKilo)
-        tvDistance.text = roundedDistanceInKilo+"km"
 
-        shopFragmentViewModel.fetchShopWeather(latitude+","+longitude)//"24.7394478,46.8098221"
+        tvName.text = shop.name
+        tvCategory.text  = getString(R.string.category)+shop.categories[FIRST_ITEM].title
+        val distanceInKilo = shop.distanceInMeters/ KILO
+        val roundedDistanceInKilo = String.format(getString(R.string.kilo_format), distanceInKilo)
+        tvDistance.text = roundedDistanceInKilo+getString(R.string.km)
+
+        shopFragmentViewModel.fetchShopWeather(latitude+getString(R.string.comma)+longitude)
 
         shopFragmentViewModel.shopWeatherLiveData?.observe(
             viewLifecycleOwner,
@@ -161,19 +169,17 @@ class ShopFragment : Fragment() {
         super.onStart()
 
         imgViewMap.setOnClickListener {
-            val uri = Uri.parse("geo:0,0?q="+latitude+","+longitude)
-            //startActivity(Intent(Intent.ACTION_VIEW,uri))
+            val uri = Uri.parse(getString(R.string.geo_args)+
+                    latitude+getString(R.string.comma)+longitude)
 
-
-           // val gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988")
 
             val mapIntent = Intent(Intent.ACTION_VIEW, uri)
-            mapIntent.setPackage("com.google.android.apps.maps")
+            mapIntent.setPackage(getString(R.string.map_package))
             startActivity(mapIntent)
 
         }
         imgViewFavorite.setOnClickListener {
-            var fragmentManager = activity?.supportFragmentManager
+            val fragmentManager = activity?.supportFragmentManager as FragmentManager
             FavoriteFragment.newInstance(shop).apply {
                 if(fragmentManager != null){
                     show(fragmentManager, DIALOG_HOURS)
@@ -187,62 +193,62 @@ class ShopFragment : Fragment() {
             btnNow.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay0.setOnClickListener {
-            fetchShopWeatherByDay(0)
+            fetchShopWeatherByDay(DAY_0)
             changeBtnsTextColor()
             btnDay0.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay1.setOnClickListener {
-            fetchShopWeatherByDay(1)
+            fetchShopWeatherByDay(DAY_1)
             changeBtnsTextColor()
             btnDay1.setTextColor(getColor(requireContext(),R.color.purple_700))
 
         }
         btnDay2.setOnClickListener {
-            fetchShopWeatherByDay(2)
+            fetchShopWeatherByDay(DAY_2)
             changeBtnsTextColor()
             btnDay2.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay3.setOnClickListener {
-            fetchShopWeatherByDay(3)
+            fetchShopWeatherByDay(DAY_3)
             changeBtnsTextColor()
             btnDay3.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay4.setOnClickListener {
-            fetchShopWeatherByDay(4)
+            fetchShopWeatherByDay(DAY_4)
             changeBtnsTextColor()
             btnDay4.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay5.setOnClickListener {
-            fetchShopWeatherByDay(5)
+            fetchShopWeatherByDay(DAY_5)
             changeBtnsTextColor()
             btnDay5.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay6.setOnClickListener {
-            fetchShopWeatherByDay(6)
+            fetchShopWeatherByDay(DAY_6)
             changeBtnsTextColor()
             btnDay6.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay7.setOnClickListener {
-            fetchShopWeatherByDay(7)
+            fetchShopWeatherByDay(DAY_7)
             changeBtnsTextColor()
             btnDay7.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay8.setOnClickListener {
-            fetchShopWeatherByDay(8)
+            fetchShopWeatherByDay(DAY_8)
             changeBtnsTextColor()
             btnDay8.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnDay9.setOnClickListener {
-            fetchShopWeatherByDay(9)
+            fetchShopWeatherByDay(DAY_9)
             changeBtnsTextColor()
             btnDay9.setTextColor(getColor(requireContext(),R.color.purple_700))
         }
         btnHourly.setOnClickListener {
-            var listOfHours = forecast.forecastday[0].hours
+            val listOfHours = forecast.forecastday[FIRST_ITEM].hours
             val arrayListOfHours = arrayListOf<Hour>()
             arrayListOfHours.addAll(listOfHours)
 
-            var fragmentManager = activity?.supportFragmentManager
+            val fragmentManager = activity?.supportFragmentManager as FragmentManager
             HoursListFragment.newInstance(arrayListOfHours).apply {
                 if(fragmentManager != null){
                     show(fragmentManager, DIALOG_HOURS)
@@ -254,7 +260,7 @@ class ShopFragment : Fragment() {
 
     }
     private  fun fetchShopWeatherByDay(numOfDay:Int){
-        shopFragmentViewModel.fetchShopWeatherByDay(latitude+","+
+        shopFragmentViewModel.fetchShopWeatherByDay(latitude+getString(R.string.comma)+
                 longitude,requestDateFormatter.format(day(numOfDay).time))
         observeWeatherLiveData()
     }
@@ -274,7 +280,7 @@ class ShopFragment : Fragment() {
 
     }
     private  fun day(numOfDay:Int):Calendar{
-        var day = Calendar.getInstance()
+        val day = Calendar.getInstance()
         day.add(Calendar.DAY_OF_WEEK,numOfDay)
 
         return day
@@ -285,28 +291,28 @@ class ShopFragment : Fragment() {
             viewLifecycleOwner,
             Observer {weatherRes->
                  forecast = weatherRes.forecast
-                showDayWeather(forecast.forecastday[0])
+                showDayWeather(forecast.forecastday[FIRST_ITEM])
 
             })
 
     }
     private fun updateUi(){
 
-        Picasso.get().load(shop.imageUrl).resize(410,350)
+        Picasso.get().load(shop.imageUrl).resize(SHOP_IMG_WIDTH,SHOP_IMG_HEIGHT)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView)
         tvName.text = shop.name
 
         ratingBar.rating = args.shop.rating.toFloat()
-         btnDay1.text =displayDateFromater.format(day(1).time)
-        btnDay2.text = displayDateFromater.format(day(2).time)
-        btnDay3.text =displayDateFromater.format(day(3).time)
-        btnDay4.text = displayDateFromater.format(day(4).time)
-        btnDay5.text =displayDateFromater.format(day(5).time)
-        btnDay6.text = displayDateFromater.format(day(6).time)
-        btnDay7.text =displayDateFromater.format(day(7).time)
-        btnDay8.text = displayDateFromater.format(day(8).time)
-        btnDay9.text =displayDateFromater.format(day(9).time)
+         btnDay1.text =displayDateFromater.format(day(DAY_1).time)
+        btnDay2.text = displayDateFromater.format(day(DAY_2).time)
+        btnDay3.text =displayDateFromater.format(day(DAY_3).time)
+        btnDay4.text = displayDateFromater.format(day(DAY_4).time)
+        btnDay5.text =displayDateFromater.format(day(DAY_5).time)
+        btnDay6.text = displayDateFromater.format(day(DAY_6).time)
+        btnDay7.text =displayDateFromater.format(day(DAY_7).time)
+        btnDay8.text = displayDateFromater.format(day(DAY_8).time)
+        btnDay9.text =displayDateFromater.format(day(DAY_9).time)
 
 
 
@@ -318,13 +324,14 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
     currentWearher =weatherResponse.current
     tvCondition.text = currentWearher.condition.text
     Log.d(TAG,currentWearher.condition.text)
-    tvTemp.text = currentWearher.temp+8451.toChar()
+    tvTemp.text = currentWearher.temp+TEMP_SYMBOL.toChar()
     tvHumidity.text = currentWearher.humidity+" H"
     tvDate.text = currentWearher.pressure+" P"
     tvMinTemp.visibility = View.GONE
     tvHumidity.visibility = View.VISIBLE
 
-    Picasso.get().load("https:"+currentWearher.condition.icon).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
+    Picasso.get().load(getString(R.string.base_url)+currentWearher.condition.icon)
+        .resize(WEATHER_ICON_WIDTH,WEATHER_ICON_HEIGHT).placeholder(R.drawable.ic_launcher_foreground)
         .into(imgCondition)
 
 
@@ -332,36 +339,27 @@ private fun showCurrentWeather(weatherResponse:WeatherResponse){
     private fun showDayWeather(forecastday:Forecastday){
 
        val day = forecastday.day
-        val astro =forecastday.astro
-        if(day.condition.text == "Patchy rain possible"){
-            tvCondition.text ="Patchy rain"
+        if(day.condition.text == getString(R.string.patchy_rain_text)){
+            tvCondition.text = getString(R.string.patchy_rain)
         }
 
         Log.d(TAG,day.condition.text)
 
-        tvTemp.text = "max "+day.maxTemp+8451.toChar()
+        tvTemp.text = getString(R.string.max)+day.maxTemp+ TEMP_SYMBOL.toChar()
         tvHumidity.visibility = View.GONE
 
-        tvDate.text = "sunrise "+forecastday.astro.sunrise
-        tvMinTemp.text = "min "+day.minTemp+8451.toChar()
+        tvDate.text = getString(R.string.sunrise)+forecastday.astro.sunrise
+        tvMinTemp.text = getString(R.string.min)+day.minTemp+ TEMP_SYMBOL.toChar()
         tvMinTemp.visibility = View.VISIBLE
 
         ratingBar.rating = shop.rating.toFloat()
-        Picasso.get().load("https:"+day.condition.icon).resize(370,350).placeholder(R.drawable.ic_launcher_foreground)
+        Picasso.get().load(getString(R.string.base_url)+day.condition.icon)
+            .resize(WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT)
+            .placeholder(R.drawable.ic_launcher_foreground)
             .into(imgCondition)
 
 
     }
 
-    companion object {
 
-
-        fun newInstance(param1: String, param2: String) =
-                ShopFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
 }

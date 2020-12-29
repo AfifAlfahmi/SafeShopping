@@ -16,13 +16,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://api.yelp.com/v3/"
 private const val BASE_WEATHER_URL = "https://api.weatherapi.com/v1/"
+private const val BASE_URL = "https://api.yelp.com/v3/"
 private const val API_KEY = "vNQd7Rt3Hs63t6kdpnGU2wdzQdkyH_EO2eblSMgT-MrnguULSNpGqgWmMJadD3x_MaA_cxM7mQtSNAG01rWoOh1wS7oazCi2x9fxpGkXiTq4Q9JFm28mDaIx_ufYX3Yx"
 
 private const val TAG = "FetchShops"
 
-class FetchShops {
+class WeatherRepository {
 
 
     fun fetchWeather(loc:String) :LiveData<WeatherResponse>{
@@ -88,21 +88,19 @@ class FetchShops {
         return responseLiveData
 
     }
+
     fun fetchShops(): LiveData<List<Shop>> {
         val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
         var shops=  mutableListOf<Shop>()
-
-
         val retrofit: Retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
         yelpApi.fetchShops("Bearer $API_KEY",
-            40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
-
+            40.6971494,-73.6994965,40000 ).enqueue(object : Callback<YelpResponse> {
             override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-               Log.d(TAG,"onResponse ${response.body()}")
+                Log.d(TAG,"onResponse ${response.body()}")
                 val body = response.body()
                 if(body == null){
                     Log.d(TAG,"onResponse  null response body")
@@ -115,8 +113,6 @@ class FetchShops {
 
                 shops.addAll(shopList)
 
-
-
                 responseLiveData.value = shops
 
             }
@@ -124,42 +120,6 @@ class FetchShops {
                 Log.d(TAG,"onFailure $t")
 
             }
-
-
-        })
-        return responseLiveData
-    }
-
-    fun searchShops(searchTerm:String): LiveData<List<Shop>> {
-        val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
-        var shops=  mutableListOf<Shop>()
-
-
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
-            .build()
-        val yelpApi = retrofit.create(YelpApi::class.java)
-        yelpApi.searchShops("Bearer $API_KEY",
-            searchTerm,40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
-
-            override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-                Log.d(TAG,"onResponse ${response.body()}")
-                val body = response.body()
-                if(body == null){
-                    Log.d(TAG,"onResponse  null response body")
-                    return
-                }
-                shops.addAll(body.shops)
-                responseLiveData.value = shops
-
-            }
-            override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
-                Log.d(TAG,"onFailure $t")
-
-            }
-
-
         })
         return responseLiveData
     }
