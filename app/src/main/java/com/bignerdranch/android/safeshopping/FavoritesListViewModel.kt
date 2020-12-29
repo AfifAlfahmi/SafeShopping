@@ -13,8 +13,8 @@ class FavoritesListViewModel : ViewModel() {
         favoritesListLiveData = shopRepository.getFavoritesShops()
     }
 
-    fun addFavoriteShop(favshop:FavoriteShop) {
-        shopRepository.addFavoriteShop(favshop)
+    fun deleteFavoriteShop(id:String) {
+        shopRepository.deleteFavoriteShop(id)
     }
 
     fun getFavoritesShops(){

@@ -108,7 +108,12 @@ class FetchShops {
                     Log.d(TAG,"onResponse  null response body")
                     return
                 }
-                shops.addAll(body.shops)
+                var shopList: List<Shop> = body?.shops
+                shopList = shopList.filterNot {
+                    it.imageUrl.isEmpty()
+                }
+
+                shops.addAll(shopList)
 
 
 

@@ -37,11 +37,13 @@ class ShopsListFragment : Fragment() {
 
     lateinit var tvLocation:TextView
     private lateinit var shopsRecyclerView: RecyclerView
-    private lateinit var btnMap: Button
     private lateinit var progressBar: ProgressBar
-   lateinit var matSearchView:MaterialSearchView
+    lateinit var matSearchView:MaterialSearchView
     lateinit var toolBar:androidx.appcompat.widget.Toolbar
-    var searchList= mutableListOf<String>()
+   private  lateinit var shopsList:List<Shop>
+   private var searchList= mutableListOf<String>()
+
+
 
 
     private lateinit var shopsListViewModel: ShopsListViewModel
@@ -51,8 +53,7 @@ class ShopsListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
 
-
-            shopsListViewModel = ViewModelProviders.of(this).get(ShopsListViewModel::class.java)
+        shopsListViewModel = ViewModelProviders.of(this).get(ShopsListViewModel::class.java)
         setHasOptionsMenu(true)
         arguments?.let {
             if(it.getDouble(ARG_LAT) != null){
@@ -72,7 +73,6 @@ class ShopsListFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_shops_list, container, false)
         tvLocation = view.findViewById(R.id.tvLocation)
         shopsRecyclerView = view.findViewById(R.id.shopsRecyclerView)
-        btnMap = view.findViewById(R.id.btnMap)
         progressBar =view.findViewById(R.id.progressBar)
         matSearchView = view.findViewById(R.id.search_view)
         toolBar = view.findViewById(R.id.toolbar)
@@ -80,18 +80,9 @@ class ShopsListFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = ""
         progressBar.visibility = View.GONE
 
-         val fetchShops = FetchShops()
-        fetchShops.fetchShops()
+
         shopsRecyclerView.layoutManager = GridLayoutManager(context, 1)
-        btnMap.setOnClickListener {
 
-            //findNavController(view).navigate(R.id.action_shopsListFragment_to_mapsFragment)
-
-            val action = ShopsListFragmentDirections.actionShopsListFragmentToMapsFragment()
-            findNavController().navigate(action)
-
-
-        }
         return view
 
     }
@@ -107,13 +98,14 @@ class ShopsListFragment : Fragment() {
                 Observer { shopsList ->
 
                     shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                    Log.d(TAG," local list "+shopsList.size)
                     Log.d(TAG,shopsList.size.toString())
 
 
                 })
         }
         else{
-            Log.d(TAG,"network  Available")
+           Log.d(TAG,"network  Available")
 
         }
 
@@ -122,27 +114,11 @@ class ShopsListFragment : Fragment() {
 
         Log.d(TAG,"onView Created")
 
-            tvLocation.text = lat.toString()
+          //  tvLocation.text = lat.toString()
             Log.d(TAG,shopsListViewModel.lat.toString())
 
 
-        shopsListViewModel.shopsListLiveData.observe(
-                viewLifecycleOwner,
-                Observer { shopsList ->
-
-
-                                if(shopsList.size == 0 ){
-                                    shopsListViewModel.fetchShops()
-                                }
-
-
-
-
-
-                    shopsRecyclerView.adapter = ShopAdapter(shopsList)
-                    shopsListViewModel.addShops(shopsList)
-
-                })
+        observeShopsLiveData()
 
 
 
@@ -159,20 +135,32 @@ class ShopsListFragment : Fragment() {
             object : ConnectivityManager.NetworkCallback() {
 
                 override fun onAvailable(network: Network) {
-
+                   // Log.d(TAG,"network  Available")
 
                     internetConnection = true
 
                 }
 
                 override fun onLost(network: Network) {
-
+                   // Log.d(TAG,"network Lost")
                     internetConnection = false
 
                 }
             })
-//        cm.unregisterNetworkCallback(ConnectivityManager.NetworkCallback())
+       //cm.unregisterNetworkCallback(ConnectivityManager.NetworkCallback())
         return internetConnection
+    }
+
+    fun observeShopsLiveData(){
+        shopsListViewModel.shopsListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { shops ->
+                this.shopsList = shops
+                shopsRecyclerView.adapter = ShopAdapter(shopsList)
+                progressBar.visibility = View.GONE
+                shopsListViewModel.deleteShops()
+                shopsListViewModel.addShops(shopsList)
+            })
     }
 
 fun observeSearchLiveData(){
@@ -215,16 +203,8 @@ fun observeSearchLiveData(){
                     shopsListViewModel.addSearchTerm(search)
 
                     observeSearchLiveData()
-                    shopsListViewModel.shopsListLiveData.observe(
-                        viewLifecycleOwner,
-                        Observer { shopsList ->
+                    observeShopsLiveData()
 
-                            shopsRecyclerView.adapter = ShopAdapter(shopsList)
-                            progressBar.visibility = View.GONE
-                            shopsListViewModel.addShops(shopsList)
-
-
-                        })
                     return true
                 }
 
@@ -289,16 +269,22 @@ fun observeSearchLiveData(){
         }
 
         fun bindGalleryItem(shop: Shop) {
-            this.shop=shop
-            var distanceInKilo = shop.distanceInMeters/1000
-            val roundedDistanceInKilo = String.format("%.2f", distanceInKilo)
 
-            tvShpoName.text =shop.name
-            ratingBar.rating = shop.rating.toFloat()
-            tvDistance.text = roundedDistanceInKilo+"km"
-            tvCategory.text = "Category "+shop.categories[0].title
-            Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)
-                .into(imageViewShop)
+                this.shop=shop
+                var distanceInKilo = shop.distanceInMeters/1000
+                val roundedDistanceInKilo = String.format("%.2f", distanceInKilo)
+
+                tvShpoName.text =shop.name
+                ratingBar.rating = shop.rating.toFloat()
+                tvDistance.text = roundedDistanceInKilo+"km"
+                tvCategory.text = "Category "+shop.categories[0].title
+            if(!shop.imageUrl.isEmpty()){
+                Picasso.get().load(shop.imageUrl).resize(100, 100 ).placeholder(R.drawable.ic_launcher_foreground)
+                    .into(imageViewShop)
+            }
+
+
+
 
         }
 

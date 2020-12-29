@@ -83,18 +83,13 @@ class FavoriteFragment : BottomSheetDialogFragment(){
 
             favoriteShop = FavoriteShop(shop.id,shop.name,color,title,shop.price,shop.rating,shop.numReviews,shop.distanceInMeters,shop.imageUrl
             ,shop.categories,shop.location,shop.coordinates)
-//            favoriteShop?.name  = shop.name.toString()
-//            favoriteShop?.rating = shop.rating
-//            favoriteShop?.price = shop.price
-//            favoriteShop?.numReviews= shop.numReviews
-//            favoriteShop?.distanceInMeters = shop.distanceInMeters
-//            favoriteShop?.imageUrl = shop.imageUrl
-//            favoriteShop?.categories = shop.categories
-//            favoriteShop?.location = shop.location
-//            favoriteShop?.coordinates = shop.coordinates
+
 
 
             shopRepository.addFavoriteShop(favoriteShop)
+
+                dismiss()
+
 
         }
 

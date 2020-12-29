@@ -292,7 +292,7 @@ class ShopFragment : Fragment() {
     }
     private fun updateUi(){
 
-        Picasso.get().load(args.shop.imageUrl).resize(410,350)
+        Picasso.get().load(shop.imageUrl).resize(410,350)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView)
         tvName.text = shop.name

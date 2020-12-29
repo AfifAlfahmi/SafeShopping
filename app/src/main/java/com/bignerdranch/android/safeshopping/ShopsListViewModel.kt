@@ -29,6 +29,9 @@ class ShopsListViewModel : ViewModel() {
   fun addShops(shopsList:List<Shop>) {
       shopRepository.addShops(shopsList)
   }
+    fun deleteShops(){
+        shopRepository.deleteShops()
+    }
 
     fun getShopsFromRoom(){
 

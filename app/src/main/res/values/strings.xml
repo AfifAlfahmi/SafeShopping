@@ -7,6 +7,11 @@
     <string name="clear_search">Clear Search</string>
     <string name="search_hint">search shops</string>
     <string name="app_label">SafeShopping</string>
+    <string name="book_mark_hint">Title</string>
+    <string name="date_pattern">yyyy-MM-dd HH:mm</string>
+    <string name="time_formatter">HH:mm</string>
+    <string name="date_formatter">yyyy-MM-dd</string>
+    <string name="base_url">https:</string>
     <string-array name="empty_list">
         <item></item>
     </string-array>

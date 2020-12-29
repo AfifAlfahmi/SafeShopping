@@ -18,5 +18,5 @@ interface FavotiteShopDao {
     fun addFavoriteShop(favShop: FavoriteShop)
 
     @Query("DELETE  FROM favoriteshop WHERE id=(:id)")
-    fun deleteShop(id: String)
+    fun deleteFavoriteShop(id: String)
 }

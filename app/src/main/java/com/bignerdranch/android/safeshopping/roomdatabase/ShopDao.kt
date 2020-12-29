@@ -16,6 +16,6 @@ interface ShopDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)//onConflict = OnConflictStrategy.IGNORE
     fun addShops(shopsList: List<Shop>)
 
-    @Query("DELETE  FROM shop WHERE id=(:id)")
-    fun deleteShop(id: String)
+    @Query("DELETE  FROM shop ")
+    fun deleteShops()
 }
