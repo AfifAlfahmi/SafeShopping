@@ -15,7 +15,7 @@
     <string name="date_formatter">yyyy-MM-dd</string>
     <string name="base_url">https:</string>
     <string name="kilo_format">%.2f</string>
-    <string name="category">\"Category \"</string>
+    <string name="category">Category </string>
     <string name="km">km</string>
     <string name="comma">,</string>
     <string name="geo_args">"geo:0,0?q=</string>

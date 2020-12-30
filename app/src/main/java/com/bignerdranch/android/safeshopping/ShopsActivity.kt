@@ -115,12 +115,12 @@ class ShopsActivity : AppCompatActivity() {
 
             }
 
-            override fun onProviderEnabled(provider: String) {
-                super.onProviderEnabled(provider)
+            override fun onProviderEnabled(p0: String?) {
+                TODO("Not yet implemented")
             }
 
-            override fun onProviderDisabled(provider: String) {
-                super.onProviderDisabled(provider)
+            override fun onProviderDisabled(p0: String?) {
+                TODO("Not yet implemented")
             }
 
 
