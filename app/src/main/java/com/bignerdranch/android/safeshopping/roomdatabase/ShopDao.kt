@@ -13,6 +13,9 @@ interface ShopDao {
     @Query("SELECT * FROM shop ")
     fun getShops(): LiveData<List<Shop>>
 
+    @Query("SELECT * FROM shop ")
+    fun getShopsList(): List<Shop>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)//onConflict = OnConflictStrategy.IGNORE
     fun addShops(shopsList: List<Shop>)
 

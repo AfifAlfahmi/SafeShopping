@@ -2,14 +2,8 @@
 
 package com.bignerdranch.android.safeshopping
 
-import android.annotation.SuppressLint
-import android.app.SearchManager
 import android.content.Context
-import android.database.Cursor
 import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkInfo
-import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,9 +11,6 @@ import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.cursoradapter.widget.CursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -41,7 +32,6 @@ private const val SPAN_COUNT = 1
 
 class ShopsListFragment : Fragment() {
 
-    lateinit var tvLocation: TextView
     private lateinit var shopsRecyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     lateinit var matSearchView: MaterialSearchView
@@ -49,7 +39,8 @@ class ShopsListFragment : Fragment() {
     private lateinit var shopsList: List<Shop>
     private var searchList = mutableListOf<String>()
     private lateinit var shopsListViewModel: ShopsListViewModel
-
+    private var defaultLat =40.6971494
+    private var defaultLong = -73.6994965
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         shopsListViewModel = ViewModelProviders.of(this)
@@ -63,7 +54,6 @@ class ShopsListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_shops_list, container, false)
-        tvLocation = view.findViewById(R.id.tvLocation)
         shopsRecyclerView = view.findViewById(R.id.shopsRecyclerView)
         progressBar = view.findViewById(R.id.progressBar)
         matSearchView = view.findViewById(R.id.search_view)
@@ -96,21 +86,36 @@ class ShopsListFragment : Fragment() {
                 })
         } else {
             Log.d(TAG, " connected")
+
+               if(lat != null && long != null){
+                   shopsListViewModel.fetchShops(lat, long)
+                   Log.d(TAG, " not nul coordinates")
+               }
+            else{
+                   shopsListViewModel.fetchShops(defaultLat,defaultLong)
+                   Log.d(TAG, "  nul coordinates")
+
+               }
+
+
+            shopsListViewModel.getSearchTerms()
+            observeSearchLiveData()
+            Log.d(TAG, "onView Created")
+            Log.d(TAG, shopsListViewModel.lat.toString())
+            observeShopsLiveData()
         }
-        shopsListViewModel.getSearchTerms()
-        observeSearchLiveData()
-        Log.d(TAG, "onView Created")
-        //  tvLocation.text = lat.toString()
-        Log.d(TAG, shopsListViewModel.lat.toString())
-        observeShopsLiveData()
+
+
     }
 
     fun observeShopsLiveData() {
+        Log.d(TAG, " start observer coordinates")
 
         shopsListViewModel.shopsListLiveData.observe(
             viewLifecycleOwner,
             Observer { shops ->
                 this.shopsList = shops
+                Log.d(TAG, " shops found "+shops.size)
                 shopsRecyclerView.adapter = ShopAdapter(shopsList)
                 progressBar.visibility = View.GONE
                 shopsListViewModel.deleteShops()
@@ -252,5 +257,6 @@ class ShopsListFragment : Fragment() {
 
     companion object {
         var lat: Double? = null
+        var long: Double? = null
     }
 }

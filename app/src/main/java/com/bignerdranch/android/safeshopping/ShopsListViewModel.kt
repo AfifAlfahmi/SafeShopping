@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class ShopsListViewModel : ViewModel() {
       var lat: Double? = null
     var long: Double? = null
-    var shopsListLiveData: LiveData<List<Shop>>
+   lateinit var shopsListLiveData: LiveData<List<Shop>>
     private val shopRepository = ShopRepository.get()
 
     lateinit var shopsLocalListLiveData :LiveData<List<Shop>>
@@ -15,11 +15,11 @@ class ShopsListViewModel : ViewModel() {
 
 
     init {
-        shopsListLiveData = shopRepository.fetchShops()
+        //shopsListLiveData = shopRepository.fetchShops()
     }
 
-    fun fetchShops(){
-        shopsListLiveData =shopRepository.fetchShops()
+    fun fetchShops(lat: Double?, long:Double?){
+        shopsListLiveData =shopRepository.fetchShops(lat,long)
 
     }
     fun searchShops(searchTerm:String){

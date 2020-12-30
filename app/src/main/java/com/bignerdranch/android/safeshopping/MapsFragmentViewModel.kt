@@ -13,18 +13,19 @@ import okhttp3.Dispatcher
 private const val TAG = "MapsFragmentViewModel"
 
 class MapsFragmentViewModel : ViewModel() {
-
+    private var defaultLat =40.6971494
+    private var defaultLong = -73.6994965
     var shopsListLiveData: LiveData<List<Shop>>
     private val shopRepository = ShopRepository.get()
 
 
     init {
-        shopsListLiveData = shopRepository.fetchShops()
+        shopsListLiveData = shopRepository.fetchShops(defaultLat,defaultLong)
     }
 
 
-    fun fetchShops(){
-        shopsListLiveData =shopRepository.fetchShops()
+    fun fetchShops(lat:Double,long:Double){
+        shopsListLiveData =shopRepository.fetchShops(lat,long)
 
     }
 

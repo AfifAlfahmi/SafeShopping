@@ -16,8 +16,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.safeshopping.yelpapi.Category
+import com.bignerdranch.android.safeshopping.yelpapi.ShopLocation
 import com.squareup.picasso.Picasso
 
 
@@ -100,8 +103,11 @@ class FavoriteListFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
-//                val action = ShopsListFragmentDirections.actionShopsListFragmentToShopFragment(shop)
-//                findNavController().navigate(action)
+                val shop = Shop(shop.id,shop.name,shop.rating,
+                    shop.price,shop.numReviews,shop.distanceInMeters,shop.imageUrl
+                    ,shop.categories,shop.location,shop.coordinates)
+               val action = FavoriteListFragmentDirections.actionFavoriteListFragmentToShopFragment(shop)
+               findNavController().navigate(action)
             }
             imgViewDelete.setOnClickListener {
                 favoritesListViewModel.deleteFavoriteShop(shop.id)

@@ -85,6 +85,7 @@ private const val DIALOG_HOURS = "DialogHours"
     lateinit var forecast:Forecast
     private lateinit var shopFragmentViewModel: ShopFragmentViewModel
     private lateinit var shop:Shop
+     private lateinit var favoriteShopsList:List<FavoriteShop>
     private lateinit var latitude:String
     private lateinit var longitude:String
     val displayDateFromater = SimpleDateFormat()
@@ -136,6 +137,7 @@ private const val DIALOG_HOURS = "DialogHours"
         btnDay8  = view.findViewById(R.id.btnDay8)
         btnDay9  = view.findViewById(R.id.btnDay9)
         btnHourly  = view.findViewById(R.id.btnHourly)
+        imgViewFavorite.visibility = View.GONE
 
         tvName.setOnClickListener{
         }
@@ -164,6 +166,15 @@ private const val DIALOG_HOURS = "DialogHours"
                 updateUi()
                 showCurrentWeather(weather)
             })
+        shopFragmentViewModel.fetchFavoritesShops()
+
+        shopFragmentViewModel.favoriteShopsLiveData?.observe(
+            viewLifecycleOwner,
+            Observer {favoritesShops ->
+                favoriteShopsList = favoritesShops
+
+            }
+        )
     }
     override fun onStart() {
         super.onStart()
@@ -180,11 +191,22 @@ private const val DIALOG_HOURS = "DialogHours"
         }
         imgViewFavorite.setOnClickListener {
             val fragmentManager = activity?.supportFragmentManager as FragmentManager
-            FavoriteFragment.newInstance(shop).apply {
-                if(fragmentManager != null){
-                    show(fragmentManager, DIALOG_HOURS)
+
+            if(!isMarked()){
+                FavoriteFragment.newInstance(shop).apply {
+                    if(fragmentManager != null){
+                        show(fragmentManager, DIALOG_HOURS)
+                        imgViewFavorite.setImageResource(R.drawable.book_mark)
+
+                    }
                 }
             }
+            else{
+                shopFragmentViewModel.deleteFavoriteShop(shop.id)
+                imgViewFavorite.setImageResource(R.mipmap.book_mark)
+
+            }
+
 
         }
         btnNow.setOnClickListener{
@@ -296,11 +318,27 @@ private const val DIALOG_HOURS = "DialogHours"
             })
 
     }
+     fun isMarked():Boolean {
+         for (favoriteItem in favoriteShopsList)
+             if (favoriteItem.id == shop.id) {
+                 return true
+             }
+
+         return false
+     }
+
+
     private fun updateUi(){
 
         Picasso.get().load(shop.imageUrl).resize(SHOP_IMG_WIDTH,SHOP_IMG_HEIGHT)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView)
+
+        if(isMarked()){
+            imgViewFavorite.setImageResource(R.drawable.book_mark)
+            }
+        imgViewFavorite.visibility = View.VISIBLE
+
         tvName.text = shop.name
 
         ratingBar.rating = args.shop.rating.toFloat()

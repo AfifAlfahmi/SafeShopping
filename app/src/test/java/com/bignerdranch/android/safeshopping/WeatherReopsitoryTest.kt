@@ -40,11 +40,7 @@ class WeatherReopsitoryTest {
     var long ="46.34433"
 
     private lateinit var weatherRepository: WeatherRepository
-    @Captor
-    private lateinit var searchCaptor: ArgumentCaptor<Callback<WeatherResponse>>
 
-   @Mock
-  private lateinit var weatherRes:Callback<WeatherResponse>
 
     @Mock
     private lateinit var retrofit: Retrofit
@@ -91,16 +87,15 @@ fun tearDown() {
 
     @Test
     fun fetchPhotosResopnceCodeOnSuccess() {
-
+        val successfulResponse = 200
         val responseCall: Call<WeatherResponse> = mock()
         `when`(weatherApi.fetchWeather(ArgumentMatchers.anyString()))
             .thenReturn(responseCall)
-        val flickrResponse: WeatherResponse = mock()
         weatherRepository.fetchWeather(lat+","+long)
         val response = Response.success(weatherRepository)
         var responseCode = response.code()
 
-        assertThat(responseCode, CoreMatchers.equalTo(200))
+        assertThat(responseCode, CoreMatchers.equalTo(successfulResponse))
     }
 
     @Test fun fetchTest (){

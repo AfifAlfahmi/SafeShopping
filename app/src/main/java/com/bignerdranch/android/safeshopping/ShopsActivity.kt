@@ -148,6 +148,7 @@ class ShopsActivity : AppCompatActivity() {
 
 
         ShopsListFragment.lat = lat
+        ShopsListFragment.long = long
 
 
     }

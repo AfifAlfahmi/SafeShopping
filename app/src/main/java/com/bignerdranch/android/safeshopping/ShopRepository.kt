@@ -85,7 +85,7 @@ class ShopRepository private constructor(context: Context) {
         }
     }
 
-    fun fetchShops(): LiveData<List<Shop>> {
+    fun fetchShops(lat:Double?,long:Double?): LiveData<List<Shop>> {
         val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
         var shops=  mutableListOf<Shop>()
         val retrofit: Retrofit = Retrofit.Builder()
@@ -93,29 +93,31 @@ class ShopRepository private constructor(context: Context) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
-        yelpApi.fetchShops("Bearer $API_KEY",
-            40.6971494,-73.6994965,40000 ).enqueue(object : Callback<YelpResponse> {
-            override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-                Log.d(TAG,"onResponse ${response.body()}")
-                val body = response.body()
-                if(body == null){
-                    Log.d(TAG,"onResponse  null response body")
-                    return
+        if (lat != null && long != null) {
+            yelpApi.fetchShops("Bearer $API_KEY",
+                lat,long,40000 ).enqueue(object : Callback<YelpResponse> {
+                override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
+                    Log.d(TAG,"onResponse ${response.body()}")
+                    val body = response.body()
+                    if(body == null){
+                        Log.d(TAG,"onResponse  null response body")
+                        return
+                    }
+                    var shopList: List<Shop> = body?.shops
+                    shopList = shopList.filterNot {
+                        it.imageUrl.isEmpty()
+                    }
+
+                    shops.addAll(shopList)
+
+                    responseLiveData.value = shops
                 }
-                var shopList: List<Shop> = body?.shops
-                shopList = shopList.filterNot {
-                    it.imageUrl.isEmpty()
+                override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
+                    Log.d(TAG,"onFailure $t")
+
                 }
-
-                shops.addAll(shopList)
-
-                responseLiveData.value = shops
-            }
-            override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
-                Log.d(TAG,"onFailure $t")
-
-            }
-        })
+            })
+        }
         return responseLiveData
     }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
@@ -32,10 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
@@ -49,23 +47,39 @@ private const val SHOP_IMG_WIDTH = 100
 private const val SHOP_IMG_HEIGHT = 100
 
 class MapsFragment : Fragment() {
-    private lateinit var btnNavToShops: Button
     var shopsList = mutableListOf<Shop>()
+    private lateinit var progressBar: ProgressBar
+
+
     lateinit var mapView: View
-   private val zoom = 10.0f
+    private val zoom = 10.0f
     private lateinit var mapFragmentViewModel: MapsFragmentViewModel
 
 
     private val callback = OnMapReadyCallback { googleMap ->
         mapFragmentViewModel = ViewModelProviders.of(this).get(MapsFragmentViewModel::class.java)
 
+        googleMap.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                context,R.raw.style_json));
+
 
         Log.d(TAG, "before click" + ShopsListFragment.lat)
-        googleMap.setOnMapClickListener {
-            ShopsListFragment.lat = it.longitude
+        googleMap.setOnMapClickListener {postion ->
+            ShopsListFragment.lat = postion.latitude
+            ShopsListFragment.long = postion.longitude
+            if (googleMap != null) {
+                googleMap?.clear()
+
+            }
+
+            mapFragmentViewModel.fetchShops(postion.latitude,postion.longitude)
+            progressBar.visibility = View.VISIBLE
+
+            observeShopsLiveData(googleMap)
             Log.d(TAG, "after click" + ShopsListFragment.lat)
 
-            Toast.makeText(context, "map clicked in ${it.longitude}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "map clicked in ${postion.longitude}", Toast.LENGTH_LONG).show()
 
 
         }
@@ -82,11 +96,19 @@ class MapsFragment : Fragment() {
             true
 
         }
+        observeShopsLiveData(googleMap)
 
+
+    }
+
+    private fun observeShopsLiveData(googleMap:GoogleMap){
         mapFragmentViewModel.shopsListLiveData.observe(
             viewLifecycleOwner,
             Observer { shopsList ->
+                this.shopsList.clear()
                 this.shopsList.addAll(shopsList)
+                progressBar.visibility = View.GONE
+
                 drawMarker(googleMap)
 
             })
@@ -99,13 +121,11 @@ class MapsFragment : Fragment() {
     ): View? {
 
         mapView = inflater.inflate(R.layout.fragment_maps, container, false)
-        btnNavToShops = mapView.findViewById(R.id.btnNavToShops)
-        btnNavToShops.setOnClickListener {
-            Navigation.findNavController(mapView)
-                .navigate(R.id.action_mapsFragment_to_shopsListFragment)
+        progressBar = mapView.findViewById(R.id.mapProgressBar)
+
+        progressBar.visibility = View.GONE
 
 
-        }
 
         return mapView
     }
@@ -134,6 +154,7 @@ class MapsFragment : Fragment() {
     }
 
     private fun drawMarker(googleMap: GoogleMap) {
+
         for (shopItem in shopsList) {
 
             Glide.with(requireActivity())
@@ -150,7 +171,7 @@ class MapsFragment : Fragment() {
                         resource: Bitmap,
                         transition: Transition<in Bitmap>?
                     ) {
-                        googleMap.addMarker(
+                         googleMap.addMarker(
                             MarkerOptions()
                                 .position(
                                     LatLng(
