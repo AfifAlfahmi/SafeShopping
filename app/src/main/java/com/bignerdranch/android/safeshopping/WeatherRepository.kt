@@ -3,6 +3,7 @@ package com.bignerdranch.android.safeshopping
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bignerdranch.android.safeshopping.listener.WeatherResponseListener
 import com.bignerdranch.android.safeshopping.weatherapi.Condition
 import com.bignerdranch.android.safeshopping.weatherapi.CurrentWeather
 import com.bignerdranch.android.safeshopping.weatherapi.WeatherApi
@@ -22,50 +23,76 @@ private const val API_KEY = "vNQd7Rt3Hs63t6kdpnGU2wdzQdkyH_EO2eblSMgT-MrnguULSNp
 
 private const val TAG = "FetchShops"
 
-class WeatherRepository {
+open class WeatherRepository {
 
-
+    private val fetchWeatherListener = mutableListOf<WeatherResponseListener>()
     fun fetchWeather(loc:String) :LiveData<WeatherResponse>{
-
         val responseLiveData: MutableLiveData<WeatherResponse> = MutableLiveData()
 
-        val retrofit: Retrofit = Retrofit.Builder()
-                .baseUrl(BASE_WEATHER_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
-                .build()
-        val weatherApi = retrofit.create(WeatherApi::class.java)
+
+//        val retrofit: Retrofit = Retrofit.Builder()
+//                .baseUrl(BASE_WEATHER_URL)
+//                .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
+//                .build()
         weatherApi.fetchWeather(loc)
                 .enqueue(object :Callback<WeatherResponse>{
 
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
-                Log.d(TAG,"onResponse weather ${response.body()?.current?.condition?.text}")
+                //Log.d(TAG,"onResponse weather ${response.body()?.current?.condition?.text}")
                 val body = response.body()
                 if(body != null){
                 //    Log.d(TAG,"onResponse weather  null response body")
 
+
                     responseLiveData.value = body
+                    notifyFetchWeatherListeners()
                 }
             }
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
                 Log.d(TAG,"onFailure weather $t")
 
             }
-
-
-        })
+                })
         return responseLiveData
+    }
+    fun fetchWeatherTest() :LiveData<WeatherResponse>{
+        val responseLiveData: MutableLiveData<WeatherResponse> = MutableLiveData()
 
+
+//        val retrofit: Retrofit = Retrofit.Builder()
+//                .baseUrl(BASE_WEATHER_URL)
+//                .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
+//                .build()
+        weatherApi.fetchWeather("24.7394478,46.8098221")
+            .enqueue(object :Callback<WeatherResponse>{
+
+                override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+                    Log.d(TAG,"onResponse weather ${response.body()?.current?.condition?.text}")
+                    val body = response.body()
+                    if(body != null){
+                        //    Log.d(TAG,"onResponse weather  null response body")
+
+
+                        responseLiveData.value = body
+                        notifyFetchWeatherListeners()
+                    }
+                }
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    Log.d(TAG,"onFailure weather $t")
+
+                }
+            })
+        return responseLiveData
     }
 
     fun fetchWeatherByDay(loc:String,day:String) :LiveData<WeatherResponse>{
 
         val responseLiveData: MutableLiveData<WeatherResponse> = MutableLiveData()
 
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(BASE_WEATHER_URL)
-            .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
-            .build()
-        val weatherApi = retrofit.create(WeatherApi::class.java)
+//        val retrofit: Retrofit = Retrofit.Builder()
+//            .baseUrl(BASE_WEATHER_URL)
+//            .addConverterFactory(GsonConverterFactory.create()) //24.7394478,46.8098221   // 40.6971494,-73.6994965
+//            .build()
         weatherApi.fetchWeatherByDay(loc,day)
             .enqueue(object :Callback<WeatherResponse>{
 
@@ -74,7 +101,7 @@ class WeatherRepository {
                     val body = response.body()
                     if(body != null){
                         //    Log.d(TAG,"onResponse weather  null response body")
-
+                        notifyFetchWeatherListeners()
                         responseLiveData.value = body
                     }
                 }
@@ -88,40 +115,37 @@ class WeatherRepository {
         return responseLiveData
 
     }
+    fun addFetchWeatherListener(listener: WeatherResponseListener) {
+        fetchWeatherListener += listener
+    }
+    fun removeFetchWeatherListener(listener: WeatherResponseListener) {
+        fetchWeatherListener -= listener
+    }
+    private fun notifyFetchWeatherListeners() {
+        for (listener in fetchWeatherListener) {
+            listener.onFetchWeatherSuccess()
+        }
+    }
 
-    fun fetchShops(): LiveData<List<Shop>> {
-        val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
-        var shops=  mutableListOf<Shop>()
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val yelpApi = retrofit.create(YelpApi::class.java)
-        yelpApi.fetchShops("Bearer $API_KEY",
-            40.6971494,-73.6994965,40000 ).enqueue(object : Callback<YelpResponse> {
-            override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-                Log.d(TAG,"onResponse ${response.body()}")
-                val body = response.body()
-                if(body == null){
-                    Log.d(TAG,"onResponse  null response body")
-                    return
-                }
-                var shopList: List<Shop> = body?.shops
-                shopList = shopList.filterNot {
-                    it.imageUrl.isEmpty()
-                }
 
-                shops.addAll(shopList)
+    companion object {
+        var weatherRepository: WeatherRepository? = null
+        private var weatherApi: WeatherApi
 
-                responseLiveData.value = shops
+        init {
+            val client = OkHttpClient.Builder()
+                .build()
+            val retrofit: Retrofit   = Retrofit
+                .Builder()
+                .baseUrl(BASE_WEATHER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
-            }
-            override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
-                Log.d(TAG,"onFailure $t")
+            weatherRepository = WeatherRepository()
+            weatherApi = retrofit.create(WeatherApi::class.java)
+        }
 
-            }
-        })
-        return responseLiveData
+
     }
 
 }

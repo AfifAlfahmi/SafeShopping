@@ -18,4 +18,8 @@ interface SearchDao {
 
     @Query("DELETE FROM search ")
     fun deleteSearchTerms()
+
+    @Query("SELECT * FROM search ")
+    fun getSearchList(): List<Search>
 }
+

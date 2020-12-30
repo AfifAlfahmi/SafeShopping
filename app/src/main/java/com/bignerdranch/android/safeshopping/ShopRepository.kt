@@ -76,6 +76,7 @@ class ShopRepository private constructor(context: Context) {
 
     }
     fun getSearchTerms():LiveData<List<Search>> = searchDao.getSearchTerms()
+    fun getSearchList():List<Search> = searchDao.getSearchList()
 
     fun deleteSearchTerms(){
         executor.execute {
@@ -153,7 +154,7 @@ class ShopRepository private constructor(context: Context) {
 
 
     companion object {
-        private var INSTANCE: ShopRepository? = null
+         var INSTANCE: ShopRepository? = null
         fun initialize(context: Context) {
             if (INSTANCE == null) {
                 INSTANCE = ShopRepository(context)

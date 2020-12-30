@@ -121,6 +121,8 @@ class ShopsListFragment : Fragment() {
     fun observeSearchLiveData() {
         shopsListViewModel.searchListLiveData.observe(
             viewLifecycleOwner, Observer {
+                Log.d(TAG,"Search list Size"+it.size.toString())
+
                 searchList.clear()
                 it.map {
                     searchList.add(it.searchTerm)
