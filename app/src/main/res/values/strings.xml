@@ -9,10 +9,24 @@
     <string name="app_label">SafeShopping</string>
     <string name="book_mark_hint">Title</string>
     <string name="date_pattern">yyyy-MM-dd HH:mm</string>
+    <string name="display_date_pattern">EEE MM-dd</string>
+    <string name="request_date_pattern">yyyy-MM-dd</string>
     <string name="time_formatter">HH:mm</string>
     <string name="date_formatter">yyyy-MM-dd</string>
     <string name="base_url">https:</string>
+    <string name="kilo_format">%.2f</string>
+    <string name="category">\"Category \"</string>
+    <string name="km">km</string>
+    <string name="comma">,</string>
+    <string name="geo_args">"geo:0,0?q=</string>
+    <string name="map_package">com.google.android.apps.maps</string>
+    <string name="patchy_rain_text">Patchy rain possible</string>
+    <string name="patchy_rain">Patchy rain</string>
     <string-array name="empty_list">
         <item></item>
     </string-array>
+    <string name="max">max </string>
+    <string name="min">min </string>
+    <string name="sunrise">sunrise </string>
+
 </resources>

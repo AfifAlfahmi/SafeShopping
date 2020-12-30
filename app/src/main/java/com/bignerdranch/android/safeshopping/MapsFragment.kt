@@ -1,6 +1,7 @@
 package com.bignerdranch.android.safeshopping
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -40,12 +45,14 @@ import java.lang.Exception
 
 
 private const val TAG = "MapsFragment"
+private const val SHOP_IMG_WIDTH = 100
+private const val SHOP_IMG_HEIGHT = 100
 
 class MapsFragment : Fragment() {
     private lateinit var btnNavToShops: Button
-    var shopsList= mutableListOf<Shop>()
-    lateinit var mapView:View
-
+    var shopsList = mutableListOf<Shop>()
+    lateinit var mapView: View
+   private val zoom = 10.0f
     private lateinit var mapFragmentViewModel: MapsFragmentViewModel
 
 
@@ -53,18 +60,18 @@ class MapsFragment : Fragment() {
         mapFragmentViewModel = ViewModelProviders.of(this).get(MapsFragmentViewModel::class.java)
 
 
-        Log.d(TAG,"before click"+ShopsListFragment.lat)
+        Log.d(TAG, "before click" + ShopsListFragment.lat)
         googleMap.setOnMapClickListener {
             ShopsListFragment.lat = it.longitude
-            Log.d(TAG,"after click"+ShopsListFragment.lat)
+            Log.d(TAG, "after click" + ShopsListFragment.lat)
 
-            Toast.makeText(context,"map clicked in ${it.longitude}",Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "map clicked in ${it.longitude}", Toast.LENGTH_LONG).show()
 
 
         }
         googleMap.setOnMarkerClickListener {
             for (shopItem in shopsList) {
-                if(shopItem.id == it.title){
+                if (shopItem.id == it.title) {
 
 
                     navigateToShopFragment(shopItem)
@@ -79,27 +86,23 @@ class MapsFragment : Fragment() {
         mapFragmentViewModel.shopsListLiveData.observe(
             viewLifecycleOwner,
             Observer { shopsList ->
-
-
-                if(shopsList.size == 0 )
-
-                    mapFragmentViewModel.fetchShops()
-
                 this.shopsList.addAll(shopsList)
                 drawMarker(googleMap)
 
             })
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        mapView =inflater.inflate(R.layout.fragment_maps, container, false)
+        mapView = inflater.inflate(R.layout.fragment_maps, container, false)
         btnNavToShops = mapView.findViewById(R.id.btnNavToShops)
         btnNavToShops.setOnClickListener {
-            Navigation.findNavController(mapView).navigate(R.id.action_mapsFragment_to_shopsListFragment)
-
+            Navigation.findNavController(mapView)
+                .navigate(R.id.action_mapsFragment_to_shopsListFragment)
 
 
         }
@@ -114,72 +117,68 @@ class MapsFragment : Fragment() {
 
 
     }
-    private  fun navigateToShopFragment(shop:Shop){
+
+    private fun navigateToShopFragment(shop: Shop) {
 
 
-//                    val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragment) as NavHostFragment
-//                    val navController = navHostFragment.navController
-//
-//                    navController.navigate(MapsFragmentDirections.actionMapsFragmentToShopFragment(shop))
-   try {
-       val action = MapsFragmentDirections.actionMapsFragmentToShopFragment(shop)
-       findNavController().navigate(action)
+        try {
+            val action = MapsFragmentDirections.actionMapsFragmentToShopFragment(shop)
+            findNavController().navigate(action)
 
-             }
-   catch (ex:Exception){
+        } catch (ex: Exception) {
 
 
-   }
-
-
+        }
 
 
     }
-    private  fun drawMarker(googleMap:GoogleMap){
+
+    private fun drawMarker(googleMap: GoogleMap) {
         for (shopItem in shopsList) {
-            val shopLocation = LatLng(shopItem.coordinates.latitude.toDouble(),
-                shopItem.coordinates.longitude.toDouble())
-            var bitmap: Bitmap? = null
 
-            runBlocking {
-                var job = launch(Dispatchers.IO) {
-                    var imageUrl = shopItem.imageUrl
+            Glide.with(requireActivity())
+                .asBitmap()
+                .load(shopItem.imageUrl)
+                .circleCrop()
+                .apply(RequestOptions().override(SHOP_IMG_WIDTH, SHOP_IMG_HEIGHT))
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        //
+                    }
 
-                    bitmap = Picasso.get().load(imageUrl).resize(200, 200).get()
-                }
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        googleMap.addMarker(
+                            MarkerOptions()
+                                .position(
+                                    LatLng(
+                                        shopItem.coordinates.latitude.toDouble(),
+                                        shopItem.coordinates.longitude.toDouble()
+                                    )
+                                )
+                                .title(shopItem.id)
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(resource)
+                                )
 
-                job.join()
-                var roundedPhoto = RoundedBitmapDrawableFactory.create(resources, bitmap)
 
-                roundedPhoto.isCircular = true
-
-                googleMap?.addMarker(
-                    MarkerOptions().position(
-                        LatLng(
-                            shopLocation.latitude,
-                            shopLocation.longitude
                         )
-                    )
-                        .title(shopItem.id)
-                        .icon(BitmapDescriptorFactory.fromBitmap(roundedPhoto.toBitmap()))
-                )
-                googleMap?.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(
-                            shopLocation.latitude,
-                            shopLocation.longitude
-                        ), 10.0f
-                    )
-                )
-            }
+                        googleMap?.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(LatLng(
+                                    shopItem.coordinates.latitude.toDouble(),
+                                    shopItem.coordinates.longitude.toDouble()
+                                ), zoom
+                            )
+                        )
+
+                    }
+                })
 
 
         }
     }
-    companion object {
-        fun newInstance(): MapsFragment {
 
-            return MapsFragment()
-        }
-    }
+
 }

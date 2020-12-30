@@ -6,20 +6,19 @@ import com.bignerdranch.android.safeshopping.weatherapi.WeatherResponse
 
 class ShopFragmentViewModel: ViewModel() {
 
-    var shopLiveData: LiveData<Shop>? = null
     var shopWeatherLiveData: LiveData<WeatherResponse>? = null
-    private val fetchShops = FetchShops()
+    private val WeatherRepo = WeatherRepository()
 
     init {
         //shopLiveData = fetchShops.fetchShopDetail()
     }
 
     fun fetchShopWeather(loc:String) {
-        shopWeatherLiveData = fetchShops.fetchWeather(loc)
+        shopWeatherLiveData = WeatherRepo.fetchWeather(loc)
 
     }
 
     fun fetchShopWeatherByDay(loc:String,day:String){
-        shopWeatherLiveData = fetchShops.fetchWeatherByDay(loc,day)
+        shopWeatherLiveData = WeatherRepo.fetchWeatherByDay(loc,day)
     }
 }
