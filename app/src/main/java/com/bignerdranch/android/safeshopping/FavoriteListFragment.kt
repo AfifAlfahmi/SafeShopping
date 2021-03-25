@@ -1,17 +1,12 @@
 package com.bignerdranch.android.safeshopping
 
-import android.content.Context
 import android.graphics.Color
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,8 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.safeshopping.yelpapi.Category
-import com.bignerdranch.android.safeshopping.yelpapi.ShopLocation
 import com.squareup.picasso.Picasso
 
 
@@ -50,7 +43,11 @@ class FavoriteListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_favorites_list, container, false)
+        val view = inflater.inflate(
+            R.layout.fragment_favorites_list,
+            container,
+            false
+        )
         tvLocation = view.findViewById(R.id.tvLocation)
         shopsRecyclerView = view.findViewById(R.id.shopsRecyclerView)
         progressBar = view.findViewById(R.id.progressBar)
@@ -80,8 +77,6 @@ class FavoriteListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_clear -> {
-                //photoGalleryViewModel.fetchPhotos("")
-                Toast.makeText(context, "cleared", Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -103,15 +98,16 @@ class FavoriteListFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
-                val shop = Shop(shop.id,shop.name,shop.rating,
-                    shop.price,shop.numReviews,shop.distanceInMeters,shop.imageUrl
-                    ,shop.categories,shop.location,shop.coordinates)
-               val action = FavoriteListFragmentDirections.actionFavoriteListFragmentToShopFragment(shop)
-               findNavController().navigate(action)
+                val shop = Shop(
+                    shop.id, shop.name, shop.rating, shop.numReviews,
+                    shop.distanceInMeters, shop.imageUrl, shop.categories, shop.coordinates
+                )
+                val action = FavoriteListFragmentDirections
+                    .actionFavoriteListFragmentToShopFragment(shop)
+                findNavController().navigate(action)
             }
             imgViewDelete.setOnClickListener {
                 favoritesListViewModel.deleteFavoriteShop(shop.id)
-
             }
         }
 
@@ -128,11 +124,12 @@ class FavoriteListFragment : Fragment() {
             tvDistance.text = roundedDistanceInKilo + getString(R.string.km)
             tvCategory.text = getString(R.string.category) + shop.categories[FIRST_ITEM].title
             colorLayout.setBackgroundColor(Color.parseColor(shop.color))
-            Picasso.get().load(shop.imageUrl).resize(SHOP_IMG_WIDTH, SHOP_IMG_HEIGHT)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(imageViewShop)
+            if (!shop.imageUrl.isEmpty()) {
+                Picasso.get().load(shop.imageUrl).resize(SHOP_IMG_WIDTH, SHOP_IMG_HEIGHT)
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .into(imageViewShop)
+            }
         }
-
         override fun onClick(v: View) {
 
         }
@@ -152,7 +149,6 @@ class FavoriteListFragment : Fragment() {
                 false
             )
             return ShopHolder(view)
-
         }
 
         override fun getItemCount(): Int = galleryItems.size
@@ -163,6 +159,5 @@ class FavoriteListFragment : Fragment() {
             holder.bindGalleryItem(galleryItem)
         }
     }
-
 
 }

@@ -10,22 +10,21 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
+
 private const val TAG = "MapsFragmentViewModel"
 
 class MapsFragmentViewModel : ViewModel() {
-    private var defaultLat =40.6971494
+    private var defaultLat = 40.6971494
     private var defaultLong = -73.6994965
     var shopsListLiveData: LiveData<List<Shop>>
     private val shopRepository = ShopRepository.get()
 
-
     init {
-        shopsListLiveData = shopRepository.fetchShops(defaultLat,defaultLong)
+        shopsListLiveData = shopRepository.fetchShops(defaultLat, defaultLong)
     }
 
-
-    fun fetchShops(lat:Double,long:Double){
-        shopsListLiveData =shopRepository.fetchShops(lat,long)
+    fun fetchShops(lat: Double, long: Double) {
+        shopsListLiveData = shopRepository.fetchShops(lat, long)
 
     }
 

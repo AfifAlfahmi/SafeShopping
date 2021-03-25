@@ -7,8 +7,7 @@ import kotlinx.android.parcel.RawValue
 
 @Parcelize
 data class Forecastday(
-
-     val date :String,
+    val date :String,
      val day :@RawValue Day,
      var astro:@RawValue Astro,
     @SerializedName("hour") val hours:@RawValue List<Hour>

@@ -4,43 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    tools:context=".ShopsListFragment">
 
     <TextView
-        android:id="@+id/tvDay"
-        android:layout_width="376dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/tvLocation"
+        android:layout_width="161dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:text="Favorite List"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hoursRecyclerView"
-        android:layout_width="355dp"
-        android:layout_height="307dp"
-        android:layout_marginTop="4dp"
+        android:id="@+id/shopsRecyclerView"
+        android:layout_width="750dp"
+        android:layout_height="290dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDay" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
-    <Button
-        android:id="@+id/btnClose"
-        android:layout_width="228dp"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="15dp"
-        android:text="Close"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="200dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hoursRecyclerView" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

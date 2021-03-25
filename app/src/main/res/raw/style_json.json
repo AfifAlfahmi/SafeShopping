@@ -38,7 +38,7 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#191966"
+        "color": "#66c2ff"
       }
     ]
   },
@@ -47,7 +47,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#515c6d"
+        "color": "#66c2ff"
       }
     ]
   },

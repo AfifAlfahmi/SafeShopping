@@ -36,8 +36,9 @@ inline fun <reified T : Any> mock() = Mockito.mock(T::class.java)
 class WeatherReopsitoryTest {
 
 
-    var lat ="23.34433"
-    var long ="46.34433"
+    val lat ="23.34433"
+    val long ="46.34433"
+    val comma = ","
 
     private lateinit var weatherRepository: WeatherRepository
 
@@ -74,17 +75,6 @@ fun tearDown() {
     weatherRepository.removeFetchWeatherListener(weatherResponseListener)
     TestWeatherRepository.reset()
 }
-
-
-
-    @Test
-    fun fetchPhotosListenerTriggeredOnSuccess() {
-
-
-
-
-    }
-
     @Test
     fun fetchPhotosResopnceCodeOnSuccess() {
         val successfulResponse = 200
@@ -100,17 +90,8 @@ fun tearDown() {
 
     @Test fun fetchTest (){
 
-        var weatherRes  = weatherRepository.fetchWeather(lat+","+long)
-
+        var weatherRes  = weatherRepository.fetchWeather(lat+comma+long)
         ViewMatchers.assertThat(weatherRes, CoreMatchers.`is`(CoreMatchers.notNullValue()))
-
-
-
-
-
-
     }
-
-
 }
 

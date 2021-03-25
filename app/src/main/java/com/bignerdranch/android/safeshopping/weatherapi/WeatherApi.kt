@@ -16,6 +16,8 @@ interface WeatherApi {
     ): Call<WeatherResponse>
 
     @GET("forecast.json?key=26cfcf64e8634ecb84891320202712&days=1")
-    fun fetchWeatherByDay( @Query("q")loc:String,@Query("dt")day:String): Call<WeatherResponse>
+    fun fetchWeatherByDay(
+        @Query("q")loc:String,
+        @Query("dt")day:String): Call<WeatherResponse>
 
 }

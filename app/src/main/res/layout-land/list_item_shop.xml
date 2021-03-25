@@ -12,16 +12,16 @@
     cardView:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="144dp">
+        android:layout_width="687dp"
+        android:layout_height="135dp">
 
 
         <androidx.cardview.widget.CardView
 
             android:id="@+id/imageCradView"
-            android:layout_width="125dp"
+            android:layout_width="150sp"
             android:layout_height="125dp"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,26 +32,26 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cornerRadius="20sp"
                 android:scaleType="centerCrop"
+                app:cornerRadius="20sp"
                 cardView:layout_constraintStart_toStartOf="parent"
                 cardView:layout_constraintTop_toTopOf="parent"
-                cardView:srcCompat="@drawable/shop_placeholder"
-                />
+                cardView:srcCompat="@drawable/shop_placeholder" />
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvShopName"
             android:layout_width="208dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
 
             android:layout_marginEnd="14dp"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toEndOf="@+id/imageCradView"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,36 +60,39 @@
             style="@android:style/Widget.Material.Light.RatingBar.Indicator"
             android:layout_width="181dp"
             android:layout_height="31dp"
-            android:layout_marginEnd="28dp"
-            android:numStars="5"
 
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="5dp"
+            android:numStars="5"
             android:progressBackgroundTint="@color/gray"
             android:progressTint="@color/yellow"
             android:rating="1.5"
             android:stepSize="0.5"
             android:theme="@style/RatingBar"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageCradView"
             app:layout_constraintTop_toBottomOf="@+id/tvShopName" />
 
         <TextView
             android:id="@+id/tvCategory"
-            android:layout_width="112dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="12dp"
+            android:layout_width="162dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
             android:text="Riyadh"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/imageCradView"
-            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+            app:layout_constraintStart_toEndOf="@+id/tvShopName"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvDistanceInKilo"
-            android:layout_width="102dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="156dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="77dp"
+            android:layout_marginTop="14dp"
             android:text="Break Fast"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/tvCategory"
-            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+            app:layout_constraintStart_toEndOf="@+id/ratingBar"
+            app:layout_constraintTop_toBottomOf="@+id/tvCategory" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

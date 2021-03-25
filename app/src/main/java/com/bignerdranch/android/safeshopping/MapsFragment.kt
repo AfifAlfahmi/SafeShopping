@@ -49,68 +49,48 @@ private const val SHOP_IMG_HEIGHT = 100
 class MapsFragment : Fragment() {
     var shopsList = mutableListOf<Shop>()
     private lateinit var progressBar: ProgressBar
-
-
     lateinit var mapView: View
     private val zoom = 10.0f
     private lateinit var mapFragmentViewModel: MapsFragmentViewModel
-
-
     private val callback = OnMapReadyCallback { googleMap ->
-        mapFragmentViewModel = ViewModelProviders.of(this).get(MapsFragmentViewModel::class.java)
+        mapFragmentViewModel = ViewModelProviders.of(this)
+            .get(MapsFragmentViewModel::class.java)
 
         googleMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
-                context,R.raw.style_json));
-
-
-        Log.d(TAG, "before click" + ShopsListFragment.lat)
-        googleMap.setOnMapClickListener {postion ->
+                context, R.raw.style_json
+            )
+        )
+        googleMap.setOnMapClickListener { postion ->
             ShopsListFragment.lat = postion.latitude
             ShopsListFragment.long = postion.longitude
             if (googleMap != null) {
-                googleMap?.clear()
-
+                googleMap.clear()
             }
-
-            mapFragmentViewModel.fetchShops(postion.latitude,postion.longitude)
+            mapFragmentViewModel.fetchShops(postion.latitude, postion.longitude)
             progressBar.visibility = View.VISIBLE
-
             observeShopsLiveData(googleMap)
-            Log.d(TAG, "after click" + ShopsListFragment.lat)
-
-            Toast.makeText(context, "map clicked in ${postion.longitude}", Toast.LENGTH_LONG).show()
-
-
         }
+
         googleMap.setOnMarkerClickListener {
             for (shopItem in shopsList) {
                 if (shopItem.id == it.title) {
-
-
                     navigateToShopFragment(shopItem)
-
                 }
-
             }
             true
-
         }
         observeShopsLiveData(googleMap)
-
-
     }
 
-    private fun observeShopsLiveData(googleMap:GoogleMap){
+    private fun observeShopsLiveData(googleMap: GoogleMap) {
         mapFragmentViewModel.shopsListLiveData.observe(
             viewLifecycleOwner,
             Observer { shopsList ->
                 this.shopsList.clear()
                 this.shopsList.addAll(shopsList)
                 progressBar.visibility = View.GONE
-
                 drawMarker(googleMap)
-
             })
     }
 
@@ -119,38 +99,27 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         mapView = inflater.inflate(R.layout.fragment_maps, container, false)
         progressBar = mapView.findViewById(R.id.mapProgressBar)
-
         progressBar.visibility = View.GONE
-
-
 
         return mapView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
-
     }
 
     private fun navigateToShopFragment(shop: Shop) {
-
-
         try {
             val action = MapsFragmentDirections.actionMapsFragmentToShopFragment(shop)
             findNavController().navigate(action)
 
         } catch (ex: Exception) {
-
-
         }
-
-
     }
 
     private fun drawMarker(googleMap: GoogleMap) {
@@ -164,14 +133,13 @@ class MapsFragment : Fragment() {
                 .apply(RequestOptions().override(SHOP_IMG_WIDTH, SHOP_IMG_HEIGHT))
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onLoadCleared(placeholder: Drawable?) {
-                        //
-                    }
 
+                    }
                     override fun onResourceReady(
                         resource: Bitmap,
                         transition: Transition<in Bitmap>?
                     ) {
-                         googleMap.addMarker(
+                        googleMap.addMarker(
                             MarkerOptions()
                                 .position(
                                     LatLng(
@@ -183,11 +151,10 @@ class MapsFragment : Fragment() {
                                 .icon(
                                     BitmapDescriptorFactory.fromBitmap(resource)
                                 )
-
-
                         )
                         googleMap?.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(LatLng(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(
                                     shopItem.coordinates.latitude.toDouble(),
                                     shopItem.coordinates.longitude.toDouble()
                                 ), zoom
@@ -196,10 +163,6 @@ class MapsFragment : Fragment() {
 
                     }
                 })
-
-
         }
     }
-
-
 }

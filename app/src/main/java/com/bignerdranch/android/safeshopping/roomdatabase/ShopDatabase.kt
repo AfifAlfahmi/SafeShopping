@@ -7,11 +7,13 @@ import com.bignerdranch.android.safeshopping.FavoriteShop
 import com.bignerdranch.android.safeshopping.Search
 import com.bignerdranch.android.safeshopping.Shop
 
-@Database(entities = [ Shop::class,FavoriteShop::class,Search::class ], version=1,exportSchema = false)
+@Database(
+    entities = [Shop::class, FavoriteShop::class, Search::class],
+    version = 1, exportSchema = false
+)
 @TypeConverters(ShopTypeConverter::class)
 abstract class ShopDatabase : RoomDatabase() {
     abstract fun shopDao(): ShopDao
     abstract fun favoriteshopDao(): FavotiteShopDao
     abstract fun searchDao(): SearchDao
-
 }

@@ -6,6 +6,5 @@ class ShopApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         ShopRepository.initialize(this)
-
     }
 }

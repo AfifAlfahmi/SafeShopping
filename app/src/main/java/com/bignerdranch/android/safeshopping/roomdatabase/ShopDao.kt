@@ -16,7 +16,7 @@ interface ShopDao {
     @Query("SELECT * FROM shop ")
     fun getShopsList(): List<Shop>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)//onConflict = OnConflictStrategy.IGNORE
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addShops(shopsList: List<Shop>)
 
     @Query("DELETE  FROM shop ")
