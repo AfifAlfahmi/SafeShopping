@@ -67,7 +67,7 @@ class FavoriteFragment : BottomSheetDialogFragment() {
 
         btnGreen.setOnClickListener {
             layoutColor.setBackgroundColor(Color.GREEN)
-            color = greenColor
+            color =  greenColor
 
         }
         btnBlue.setOnClickListener {

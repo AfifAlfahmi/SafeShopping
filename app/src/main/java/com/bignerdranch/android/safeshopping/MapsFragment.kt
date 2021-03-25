@@ -137,7 +137,7 @@ class MapsFragment : Fragment() {
                     }
                     override fun onResourceReady(
                         resource: Bitmap,
-                        transition: Transition<in Bitmap>?
+                        transition : Transition<in Bitmap>?
                     ) {
                         googleMap.addMarker(
                             MarkerOptions()

@@ -9,10 +9,14 @@ class ShopFragmentViewModel : ViewModel() {
     var shopWeatherLiveData: LiveData<WeatherResponse>? = null
     var favoriteShopsLiveData: LiveData<List<FavoriteShop>>? = null
     private val WeatherRepo = WeatherRepository()
+
     private val shopRepository = ShopRepository.get()
 
+
     fun fetchShopWeather(loc: String) {
+
         shopWeatherLiveData = WeatherRepo.fetchWeather(loc)
+
     }
 
     fun fetchShopWeatherByDay(loc: String, day: String) {
