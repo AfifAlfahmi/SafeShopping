@@ -15,8 +15,8 @@
     <string name="date_formatter">yyyy-MM-dd</string>
     <string name="base_url">https:</string>
     <string name="kilo_format">%.2f</string>
-    <string name="category">Category </string>
-    <string name="km">km</string>
+    <string name="category">Category \u0020</string>
+    <string name="km">\u0020km</string>
     <string name="comma">,</string>
     <string name="geo_args">"geo:0,0?q=</string>
     <string name="map_package">com.google.android.apps.maps</string>
@@ -25,8 +25,10 @@
     <string-array name="empty_list">
         <item></item>
     </string-array>
-    <string name="max">max </string>
-    <string name="min">min </string>
-    <string name="sunrise">sunrise </string>
+    <string name="max">max\u0020</string>
+    <string name="min">min\u0020</string>
+    <string name="sunrise">sunrise \u0020</string>
+    <string name="humidty_symbol">\u0020 H</string>
+    <string name="pressure_symbol">\u0020 P</string>
 
 </resources>

@@ -4,9 +4,7 @@ import com.bignerdranch.android.safeshopping.Shop
 import com.google.gson.annotations.SerializedName
 
  class WeatherResponse {
-
-
-    lateinit var  current: CurrentWeather
+     lateinit var  current: CurrentWeather
      lateinit var  forecast:Forecast
 
  }

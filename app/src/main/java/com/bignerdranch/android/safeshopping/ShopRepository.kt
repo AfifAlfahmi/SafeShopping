@@ -24,146 +24,139 @@ import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "shop-database"
 private const val BASE_URL = "https://api.yelp.com/v3/"
-private const val API_KEY = "vNQd7Rt3Hs63t6kdpnGU2wdzQdkyH_EO2eblSMgT-MrnguULSNpGqgWmMJadD3x_MaA_cxM7mQtSNAG01rWoOh1wS7oazCi2x9fxpGkXiTq4Q9JFm28mDaIx_ufYX3Yx"
-
+private const val API_KEY = "Bearer vNQd7Rt3Hs63t6kdpnGU2wdzQdkyH_EO2eblSMgT-MrnguULSN" +
+        "pGqgWmMJadD3x_MaA_cxM7mQtSNAG01rWoOh1wS7oazCi2x9fxpGkXiTq4Q9JFm28mDaIx_ufYX3Yx"
+private const val RADIUS = 40000
 private const val TAG = "ShopRepository"
 
 class ShopRepository private constructor(context: Context) {
 
-    private val database : ShopDatabase = Room.databaseBuilder(
-        context.applicationContext,ShopDatabase::class.java,DATABASE_NAME).build()
+    private val database: ShopDatabase = Room.databaseBuilder(
+        context.applicationContext, ShopDatabase::class.java, DATABASE_NAME
+    ).build()
     private val shopDao = database.shopDao()
     private val favshopDao = database.favoriteshopDao()
     private val searchDao = database.searchDao()
-
-
     private val executor = Executors.newSingleThreadExecutor()
 
-
-
     fun getShops(): LiveData<List<Shop>> = shopDao.getShops()
-
 
     fun addShops(shopsList: List<Shop>) {
         executor.execute {
             shopDao.addShops(shopsList)
         }
     }
-    fun deleteShops(){
+
+    fun deleteShops() {
         executor.execute {
             shopDao.deleteShops()
         }
     }
 
-
-        fun addFavoriteShop(favShop:FavoriteShop){
-            executor.execute{
-                favshopDao.addFavoriteShop(favShop)
-            }
-
+    fun addFavoriteShop(favShop: FavoriteShop) {
+        executor.execute {
+            favshopDao.addFavoriteShop(favShop)
         }
-    fun deleteFavoriteShop(id:String) {
+    }
+
+    fun deleteFavoriteShop(id: String) {
         executor.execute {
             favshopDao.deleteFavoriteShop(id)
         }
     }
+
     fun getFavoritesShops(): LiveData<List<FavoriteShop>> = favshopDao.getFavoritesShops()
 
-    fun addSearchTerm(searchTerm: Search){
-        executor.execute{
+    fun addSearchTerm(searchTerm: Search) {
+        executor.execute {
             searchDao.addSearchTerm(searchTerm)
         }
-
     }
-    fun getSearchTerms():LiveData<List<Search>> = searchDao.getSearchTerms()
-    fun getSearchList():List<Search> = searchDao.getSearchList()
 
-    fun deleteSearchTerms(){
+    fun getSearchTerms(): LiveData<List<Search>> = searchDao.getSearchTerms()
+
+    fun deleteSearchTerms() {
         executor.execute {
             searchDao.deleteSearchTerms()
-
         }
     }
 
-    fun fetchShops(): LiveData<List<Shop>> {
+    fun fetchShops(lat: Double?, long: Double?): LiveData<List<Shop>> {
         val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
-        var shops=  mutableListOf<Shop>()
+        val shops = mutableListOf<Shop>()
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
-        yelpApi.fetchShops("Bearer $API_KEY",
-            40.6971494,-73.6994965,40000 ).enqueue(object : Callback<YelpResponse> {
-            override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-                Log.d(TAG,"onResponse ${response.body()}")
-                val body = response.body()
-                if(body == null){
-                    Log.d(TAG,"onResponse  null response body")
-                    return
+        if (lat != null && long != null) {
+            yelpApi.fetchShops(
+                 API_KEY,
+                lat, long, RADIUS
+            ).enqueue(object : Callback<YelpResponse> {
+                override fun onResponse(
+                    call: Call<YelpResponse>,
+                    response: Response<YelpResponse>
+                ) {
+                    val body = response.body()
+                    if (body == null) {
+                        return
+                    }
+                    var shopList: List<Shop> = body.shops
+                    shopList = shopList.filterNot {
+                        it.imageUrl.isEmpty()
+                    }
+                    shops.addAll(shopList)
+                    responseLiveData.value = shops
                 }
-                var shopList: List<Shop> = body?.shops
-                shopList = shopList.filterNot {
-                    it.imageUrl.isEmpty()
+
+                override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
                 }
-
-                shops.addAll(shopList)
-
-                responseLiveData.value = shops
-            }
-            override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
-                Log.d(TAG,"onFailure $t")
-
-            }
-        })
+            })
+        }
         return responseLiveData
     }
 
-    fun searchShops(searchTerm:String): LiveData<List<Shop>> {
+    fun searchShops(lat: Double?, long: Double?, searchTerm: String): LiveData<List<Shop>> {
         val responseLiveData: MutableLiveData<List<Shop>> = MutableLiveData()
-        var shops=  mutableListOf<Shop>()
-
-
+        val shops = mutableListOf<Shop>()
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val yelpApi = retrofit.create(YelpApi::class.java)
-        yelpApi.searchShops("Bearer $API_KEY",
-            searchTerm,40.6971494,-73.6994965,40000 ).enqueue(object :Callback<YelpResponse>{
+        if (lat != null && long != null) {
+            yelpApi.searchShops(API_KEY, lat, long, searchTerm, RADIUS)
+                .enqueue(object : Callback<YelpResponse> {
+                    override fun onResponse(
+                        call: Call<YelpResponse>, response:
+                        Response<YelpResponse>
+                    ) {
+                        val body = response.body()
+                        if (body == null) {
+                            return
+                        }
+                        shops.addAll(body.shops)
+                        responseLiveData.value = shops
+                    }
 
-            override fun onResponse(call: Call<YelpResponse>, response: Response<YelpResponse>) {
-                Log.d(TAG,"onResponse ${response.body()}")
-                val body = response.body()
-                if(body == null){
-                    Log.d(TAG,"onResponse  null response body")
-                    return
-                }
-                shops.addAll(body.shops)
-                responseLiveData.value = shops
-
-            }
-            override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
-                Log.d(TAG,"onFailure $t")
-
-            }
-        })
+                    override fun onFailure(call: Call<YelpResponse>, t: Throwable) {
+                    }
+                })
+        }
         return responseLiveData
     }
-
-
 
     companion object {
-         var INSTANCE: ShopRepository? = null
+        var instance: ShopRepository? = null
         fun initialize(context: Context) {
-            if (INSTANCE == null) {
-                INSTANCE = ShopRepository(context)
+            if (instance == null) {
+                instance = ShopRepository(context)
             }
         }
-        fun get(): ShopRepository {
 
-            return INSTANCE ?:
-            throw IllegalStateException()
+        fun get(): ShopRepository {
+            return instance ?: throw IllegalStateException()
         }
     }
 }

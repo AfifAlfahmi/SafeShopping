@@ -36,15 +36,12 @@ inline fun <reified T : Any> mock() = Mockito.mock(T::class.java)
 class WeatherReopsitoryTest {
 
 
-    var lat ="23.34433"
-    var long ="46.34433"
+    val lat ="23.34433"
+    val long ="46.34433"
+    val comma = ","
 
     private lateinit var weatherRepository: WeatherRepository
-    @Captor
-    private lateinit var searchCaptor: ArgumentCaptor<Callback<WeatherResponse>>
 
-   @Mock
-  private lateinit var weatherRes:Callback<WeatherResponse>
 
     @Mock
     private lateinit var retrofit: Retrofit
@@ -78,44 +75,23 @@ fun tearDown() {
     weatherRepository.removeFetchWeatherListener(weatherResponseListener)
     TestWeatherRepository.reset()
 }
-
-
-
-    @Test
-    fun fetchPhotosListenerTriggeredOnSuccess() {
-
-
-
-
-    }
-
     @Test
     fun fetchPhotosResopnceCodeOnSuccess() {
-
+        val successfulResponse = 200
         val responseCall: Call<WeatherResponse> = mock()
         `when`(weatherApi.fetchWeather(ArgumentMatchers.anyString()))
             .thenReturn(responseCall)
-        val flickrResponse: WeatherResponse = mock()
         weatherRepository.fetchWeather(lat+","+long)
         val response = Response.success(weatherRepository)
         var responseCode = response.code()
 
-        assertThat(responseCode, CoreMatchers.equalTo(200))
+        assertThat(responseCode, CoreMatchers.equalTo(successfulResponse))
     }
 
     @Test fun fetchTest (){
 
-        var weatherRes  = weatherRepository.fetchWeather(lat+","+long)
-
+        var weatherRes  = weatherRepository.fetchWeather(lat+comma+long)
         ViewMatchers.assertThat(weatherRes, CoreMatchers.`is`(CoreMatchers.notNullValue()))
-
-
-
-
-
-
     }
-
-
 }
 

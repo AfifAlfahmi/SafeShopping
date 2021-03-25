@@ -28,13 +28,12 @@ private const val TAG = "ShopsActivity"
 private const val FIRST_ITEM = 0
 
 class ShopsActivity : AppCompatActivity() {
-    var lat: Double? = null
-    var long: Double? = null
+
     private val locationPermissionCode = 1
     lateinit var locationManager: LocationManager
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
-    val minDistance:Float = 10f
+    val minDistance: Float = 10f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +47,6 @@ class ShopsActivity : AppCompatActivity() {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-
             return
         }
     }
@@ -69,8 +67,6 @@ class ShopsActivity : AppCompatActivity() {
         } else {
             requestLocation()
         }
-
-
     }
 
     override fun onRequestPermissionsResult(
@@ -80,10 +76,14 @@ class ShopsActivity : AppCompatActivity() {
     ) {
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[FIRST_ITEM]
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED
+            ) {
                 requestLocation()
             } else {
-                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this, getString(R.string.permission_denied),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -95,47 +95,35 @@ class ShopsActivity : AppCompatActivity() {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(
+                this, getString(R.string.permission_denied),
+                Toast.LENGTH_SHORT
+            ).show()
         }
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, minDistance, object :
-            LocationListener {
-            override fun onLocationChanged(p0: Location) {
-                if (p0 != null) {
-
-
-                    Log.d(TAG, "location changed" + p0.latitude.toString())
-
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+            5000,
+            minDistance,
+            object : LocationListener {
+                override fun onLocationChanged(p0: Location) {
 
                 }
-            }
 
-            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+                override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
 
-            }
+                }
 
-            override fun onProviderEnabled(p0: String?) {
-                TODO("Not yet implemented")
-            }
+                override fun onProviderEnabled(p0: String?) {
+                }
 
-            override fun onProviderDisabled(p0: String?) {
-                TODO("Not yet implemented")
-            }
-
-
-        })
-        Toast.makeText(this, lat.toString(), Toast.LENGTH_SHORT).show()
-
-
-        val localGpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        Log.d(TAG, "last location" + localGpsLocation?.latitude.toString())
+                override fun onProviderDisabled(p0: String?) {
+                }
+            })
+        val localGpsLocation = locationManager
+            .getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
         if (localGpsLocation != null) {
-            lat = localGpsLocation.latitude
-            long = localGpsLocation.longitude
-            navigateToShopsListFragment()
-
+            ShopsListFragment.lat = localGpsLocation.latitude
+            ShopsListFragment.long = localGpsLocation.longitude
         }
     }
 
@@ -144,11 +132,4 @@ class ShopsActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    fun navigateToShopsListFragment() {
-
-
-        ShopsListFragment.lat = lat
-
-
-    }
 }
