@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/shopsListFragment">
+
+    <fragment
+        android:id="@+id/shopsListFragment"
+        android:name="com.bignerdranch.android.safeshopping.ShopsListFragment"
+        android:label="fragment_shops_list"
+        tools:layout="@layout/fragment_shops_list" >
+        <action
+            android:id="@+id/action_shopsListFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_shopsListFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_shopsListFragment_to_favoriteListFragment"
+            app:destination="@id/favoriteListFragment" />
+        />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.bignerdranch.android.safeshopping.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_shopsListFragment"
+            app:destination="@id/shopsListFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.bignerdranch.android.safeshopping.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" >
+
+
+        <argument
+            android:name="shop"
+            app:argType="com.bignerdranch.android.safeshopping.Shop" />
+        <action
+            android:id="@+id/action_shopFragment_to_mapsFragment2"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_hoursListFragment"
+            app:destination="@id/hoursListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hoursListFragment"
+        android:name="com.bignerdranch.android.safeshopping.HoursListFragment"
+        android:label="HoursListFragment" />
+    <fragment
+        android:id="@+id/favoriteListFragment"
+        android:name="com.bignerdranch.android.safeshopping.FavoriteListFragment"
+        android:label="FavoriteListFragment" >
+        <action
+            android:id="@+id/action_favoriteListFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+    </fragment>
+
+</navigation>
